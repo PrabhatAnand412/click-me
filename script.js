@@ -303,7 +303,7 @@ function showGameOver() {
             "gameOverScreen"
         );
 
-    screen.hidden = false;
+    screen.removeAttribute("hidden");
 
     document.getElementById(
         "finalScore"
