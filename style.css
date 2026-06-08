@@ -116,9 +116,6 @@ h1 {
 
     position: absolute;
 
-    left: 500px;
-    top: 300px;
-
     padding: 18px 36px;
 
     font-size: 1.1rem;
@@ -277,5 +274,44 @@ h1 {
 
     to {
         transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 768px) {
+
+    h1 {
+
+        font-size: 2rem;
+    }
+
+    .stats {
+
+        gap: 8px;
+    }
+
+    .stats p {
+
+        min-width: 80px;
+
+        font-size: 0.9rem;
+    }
+
+    #message {
+
+        font-size: 1rem;
+
+        padding: 0 10px;
+    }
+
+    #runawayBtn {
+
+        padding: 18px 32px;
+
+        font-size: 1.1rem;
+    }
+
+    #gameOverScreen h1 {
+
+        font-size: 2.5rem;
     }
 }

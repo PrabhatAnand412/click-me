@@ -10,10 +10,16 @@ const fakeContainer = document.getElementById("fakeContainer");
 let score = 0;
 let misses = 0;
 let totalAttempts = 0;
-let dangerDistance = 35;
+let fakeButtonsCreated = false;
+const isTouchDevice =
+    "ontouchstart" in window ||
+    navigator.maxTouchPoints > 0;
+
+let dangerDistance =
+    isTouchDevice ? 20 : 35;
+
 let gameOver = false;
 let gamePaused = false;
-let fakeButtonsCreated = false;
 
 let highScore =
     parseInt(localStorage.getItem("highScore")) || 0;
@@ -132,6 +138,8 @@ function createFakeButtons() {
 
 document.addEventListener("mousemove", (e) => {
 
+    if(isTouchDevice) return;
+
     if (gameOver) return;
 
     const rect =
@@ -193,9 +201,38 @@ button.addEventListener("touchstart", (e) => {
 
     e.preventDefault();
 
-    if (!gameOver) {
-        teleportButton();
+    if(gameOver)
+        return;
+
+    score++;
+    totalAttempts++;
+
+    scoreDisplay.textContent = score;
+
+    updateAccuracy();
+
+    message.textContent =
+        `You got me! Score: ${score}`;
+
+    if(score > highScore){
+
+        highScore = score;
+
+        localStorage.setItem(
+            "highScore",
+            highScore
+        );
+
+        highScoreDisplay.textContent =
+            highScore;
     }
+
+    setTimeout(() => {
+
+        if(!gameOver)
+            teleportButton();
+
+    }, 120);
 });
 
 document.addEventListener("click", (e) => {
@@ -339,6 +376,36 @@ const timer = setInterval(() => {
     }
 
 }, 1000);
+
+window.addEventListener("load", () => {
+
+    const rect =
+        button.getBoundingClientRect();
+
+    button.style.left =
+        (window.innerWidth - rect.width) / 2 + "px";
+
+    button.style.top =
+        (window.innerHeight - rect.height) / 2 + "px";
+});
+
+window.addEventListener("resize", () => {
+
+    const rect =
+        button.getBoundingClientRect();
+
+    button.style.left =
+        Math.min(
+            button.offsetLeft,
+            window.innerWidth - rect.width
+        ) + "px";
+
+    button.style.top =
+        Math.min(
+            button.offsetTop,
+            window.innerHeight - rect.height
+        ) + "px";
+});
 
 document.addEventListener(
     "visibilitychange",
