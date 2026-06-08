@@ -1,64 +1,76 @@
 # 🎯 Catch The Button
 
-A browser-based game where the button does everything possible to avoid being clicked.
+A browser-based arcade game where the button actively tries to avoid being clicked.
 
-The goal sounds simple: click the button.
-
-The problem? The button has other plans.
+What starts as a simple challenge quickly turns into a chaotic battle against a smart runaway button, fake buttons, increasing difficulty, achievements, and boss modes.
 
 ---
 
 ## 🚀 Features
 
-### 🎮 Gameplay
-- Runaway button with smart escape behavior
-- Progressive difficulty system
-- Increasing danger radius as levels increase
-- Touchscreen support for mobile devices
-- Boss mode at higher scores
+### 🎮 Core Gameplay
+- Smart runaway button
+- Cursor avoidance AI
+- Touchscreen support
+- Progressive difficulty
+- Smooth movement animations
+- Mobile and desktop compatibility
 
-### 📊 Statistics
-- Score counter
+### 📊 Statistics System
+- Score tracking
 - Miss counter
 - Accuracy percentage
 - Countdown timer
-- Persistent high score using Local Storage
+- Persistent high score
+- End-of-game statistics
 
 ### 🏆 Achievement System
-Unlock achievements as you play:
+Unlock achievements while playing:
 
-- First Catch
-- Button Hunter
-- Persistence Pays Off
-- Professional Annoyer
+| Achievement | Requirement |
+|------------|------------|
+| First Catch | Catch the button once |
+| Button Hunter | Reach 5 points |
+| Persistence Pays Off | Reach 10 points |
+| Professional Annoyer | Reach 25 points |
 
-Achievements appear as in-game notifications.
+Achievements appear as animated in-game notifications.
 
 ### 😈 Annoying Features
 - Random taunting messages
-- Fake buttons that try to trick the player
-- Smart cursor avoidance
-- Increasing difficulty over time
+- Escaping button AI
+- Fake buttons
+- Increasing difficulty
+- Boss mode mechanics
 
-### ⏸️ Quality of Life
-- Automatic pause when the browser tab loses focus
-- Smooth button movement animations
-- Game Over screen with final statistics
-- Play Again button
+### 📱 Cross Platform Support
+- Desktop mouse controls
+- Mobile touchscreen controls
+- Responsive UI
+- Screen resize handling
+- Automatic pause when tab loses focus
+
+### 🎨 UI Features
+- Dark neon game theme
+- Animated title
+- Modern HUD
+- Achievement popups
+- Game over overlay
+- Glassmorphism stat cards
 
 ---
 
-## 🛠️ Built With
+# 🛠️ Technologies Used
 
 - HTML5
 - CSS3
-- JavaScript (Vanilla JS)
+- JavaScript (Vanilla)
 
-No frameworks or libraries were used.
+No external libraries or frameworks were used.
 
 ---
 
-## 📂 Project Structure
+# 📂 Project Structure
 
 ```text
 annoying-button-game/
@@ -71,72 +83,167 @@ annoying-button-game/
 
 ---
 
-## 🎯 How To Play
+# 🎯 How To Play
 
-1. Open `index.html` in your browser.
+1. Open the game in your browser.
 2. Move your cursor toward the button.
 3. Try to click it before it escapes.
-4. Earn points and unlock achievements.
-5. Survive until the timer reaches zero.
+4. Earn points.
+5. Unlock achievements.
+6. Survive until the timer runs out.
+7. Beat your high score.
 
 ---
 
-## 🏅 Achievement List
+# 🎮 Current Gameplay Progression
 
-| Achievement | Requirement |
-|------------|------------|
-| First Catch | Score 1 |
-| Button Hunter | Score 5 |
-| Persistence Pays Off | Score 10 |
-| Professional Annoyer | Score 25 |
+### Level 1
+- Basic runaway button
 
----
+### Level 2
+- Increased escape radius
 
-## 📈 Difficulty Progression
+### Level 3
+- Faster escapes
+- Smaller button
 
-| Score | Effect |
-|---------|---------|
-| 0 | Normal mode |
-| 3 | Level 2 unlocked |
-| 6 | Faster escapes |
-| 10 | Fake buttons appear |
-| 20+ | Boss mode activated |
+### Level 4
+- Fake buttons appear
 
----
-
-## 🔮 Planned Features
-
-- Sound effects
-- Difficulty selection
-- Dark mode
-- Particle effects
-- More achievements
-- Leaderboard system
-- Custom themes
-- Multiplayer mode
+### Boss Mode
+- Spinning button
+- Harder to catch
+- Activated at higher scores
 
 ---
 
-## 💡 What I Learned
+# 📈 Statistics Tracked
+
+- Score
+- Misses
+- Accuracy
+- High Score
+- Remaining Time
+
+Data is stored locally using Local Storage.
+
+---
+
+# 💡 What I Learned
 
 This project helped me practice:
 
-- DOM manipulation
-- Event handling
-- Collision detection
+- DOM Manipulation
+- Event Handling
+- Collision Detection
+- Game State Management
+- Responsive Design
 - Local Storage
-- CSS animations
-- Game state management
-- Responsive design concepts
+- CSS Animations
+- Mobile Compatibility
+- UI Design
+- JavaScript Timing Functions
 
 ---
 
-## 👨‍💻 Author
+# 🔮 Planned Features
+
+The following features are planned for future releases.
+
+## 🏠 Main Menu
+- Play button
+- Statistics page
+- Settings page
+
+## 🎚 Difficulty Selection
+- Easy
+- Normal
+- Hard
+- Nightmare
+
+## ⭐ XP & Level System
+- Experience points
+- Level progression
+- Unlockable content
+
+## 🪙 Coin System
+- Earn coins while playing
+- Achievement rewards
+- Daily rewards
+
+## 🛒 Shop
+Unlock cosmetic items such as:
+
+- Blue Button
+- Gold Button
+- Rainbow Button
+- Neon Button
+
+## 🔊 Sound Effects
+- Escape sounds
+- Click sounds
+- Achievement sounds
+- Game over sounds
+
+## ✨ Particle Effects
+- Click explosions
+- Escape trails
+- Achievement particles
+
+## 🔥 Combo System
+- Combo multipliers
+- Bonus points
+- Speed rewards
+
+## 👑 Boss Battles
+Special buttons with:
+- Teleportation
+- Clone creation
+- Color changes
+- Advanced movement patterns
+
+## 🎨 Theme System
+Unlockable themes:
+
+- Classic
+- Dark
+- Neon
+- Cyberpunk
+- Space
+
+## 📅 Daily Challenges
+Examples:
+
+- Catch 15 buttons
+- Reach 80% accuracy
+- Survive 60 seconds
+
+## 🏆 Leaderboards
+Future online leaderboard support.
+
+---
+
+# 📌 Future Vision
+
+The goal is to evolve this project from a simple runaway button experiment into a complete browser arcade game featuring:
+
+- Progression systems
+- Unlockables
+- Boss battles
+- Cosmetic customization
+- Daily challenges
+- Competitive leaderboards
+
+while remaining lightweight and playable directly in the browser.
+
+---
+
+# 👨‍💻 Author
 
 **Prabhat**
 
-A fun project created while exploring JavaScript game development.
+Created as a fun JavaScript game development project while exploring browser-based game mechanics.
 
 ---
 
-*"The button isn't running away because it's scared. It's running away because it knows you need the marks."* 😆
+*"The button isn't avoiding you because it's scared. It's avoiding you because it knows exactly where your cursor is."* 😈
