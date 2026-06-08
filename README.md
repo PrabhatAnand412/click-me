@@ -1,58 +1,142 @@
-# Catch The Button 🎯
+# 🎯 Catch The Button
 
-A browser game where the button does everything it can to avoid being clicked.
+A browser-based game where the button does everything possible to avoid being clicked.
 
-## About
+The goal sounds simple: click the button.
 
-Catch The Button is a simple JavaScript game that challenges players to click a runaway button. As the score increases, the button becomes harder to catch by increasing its escape radius and using unpredictable movement.
+The problem? The button has other plans.
 
-## Features
+---
 
-- 🖱️ Mouse proximity detection
-- 📱 Touchscreen support
-- 🎮 Progressive difficulty levels
-- 😈 Random taunting messages
-- 📊 Score tracking
-- ⚡ Fast and lightweight
+## 🚀 Features
 
-## Technologies Used
+### 🎮 Gameplay
+- Runaway button with smart escape behavior
+- Progressive difficulty system
+- Increasing danger radius as levels increase
+- Touchscreen support for mobile devices
+- Boss mode at higher scores
+
+### 📊 Statistics
+- Score counter
+- Miss counter
+- Accuracy percentage
+- Countdown timer
+- Persistent high score using Local Storage
+
+### 🏆 Achievement System
+Unlock achievements as you play:
+
+- First Catch
+- Button Hunter
+- Persistence Pays Off
+- Professional Annoyer
+
+Achievements appear as in-game notifications.
+
+### 😈 Annoying Features
+- Random taunting messages
+- Fake buttons that try to trick the player
+- Smart cursor avoidance
+- Increasing difficulty over time
+
+### ⏸️ Quality of Life
+- Automatic pause when the browser tab loses focus
+- Smooth button movement animations
+- Game Over screen with final statistics
+- Play Again button
+
+---
+
+## 🛠️ Built With
 
 - HTML5
 - CSS3
-- JavaScript
+- JavaScript (Vanilla JS)
 
-## How to Play
+No frameworks or libraries were used.
 
-1. Open the game in your browser.
-2. Move your cursor toward the button.
-3. Try to click it before it escapes.
-4. Increase your score and unlock harder levels.
+---
 
-## Project Structure
+## 📂 Project Structure
 
-
+```text
 annoying-button-game/
 │
 ├── index.html
 ├── style.css
 ├── script.js
 └── README.md
+```
 
+---
 
-## Future Improvements
+## 🎯 How To Play
 
-- Achievements system
-- High score saving
-- Accuracy statistics
-- Fake buttons
-- Smart AI movement
+1. Open `index.html` in your browser.
+2. Move your cursor toward the button.
+3. Try to click it before it escapes.
+4. Earn points and unlock achievements.
+5. Survive until the timer reaches zero.
+
+---
+
+## 🏅 Achievement List
+
+| Achievement | Requirement |
+|------------|------------|
+| First Catch | Score 1 |
+| Button Hunter | Score 5 |
+| Persistence Pays Off | Score 10 |
+| Professional Annoyer | Score 25 |
+
+---
+
+## 📈 Difficulty Progression
+
+| Score | Effect |
+|---------|---------|
+| 0 | Normal mode |
+| 3 | Level 2 unlocked |
+| 6 | Faster escapes |
+| 10 | Fake buttons appear |
+| 20+ | Boss mode activated |
+
+---
+
+## 🔮 Planned Features
+
 - Sound effects
-- Mobile optimizations
+- Difficulty selection
+- Dark mode
+- Particle effects
+- More achievements
+- Leaderboard system
+- Custom themes
+- Multiplayer mode
 
-## Screenshots
+---
 
-(Add screenshots here later)
+## 💡 What I Learned
 
-## Author
+This project helped me practice:
 
-Prabhat
+- DOM manipulation
+- Event handling
+- Collision detection
+- Local Storage
+- CSS animations
+- Game state management
+- Responsive design concepts
+
+---
+
+## 👨‍💻 Author
+
+**Prabhat**
+
+A fun project created while exploring JavaScript game development.
+
+---
+
+*"The button isn't running away because it's scared. It's running away because it knows you need the marks."* 😆
