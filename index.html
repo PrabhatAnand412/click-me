@@ -1,19 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Catch Me If You Can</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch The Button</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1>Catch The Button</h1>
+    <h1>🎯 Catch The Button</h1>
 
-    <p>Clicks: <span id="score">0</span></p>
+    <div class="stats">
+
+        <p>Score: <span id="score">0</span></p>
+        <p>Misses: <span id="misses">0</span></p>
+        <p>Accuracy: <span id="accuracy">0</span>%</p>
+        <p>High Score: <span id="highScore">0</span></p>
+        <p>Time Left: <span id="timer">60</span>s</p>
+
+    </div>
 
     <h2 id="message">Catch the button if you can!</h2>
 
+    <div id="achievementPopup">
+    <h3>🏆 Achievement Unlocked</h3>
+    <p id="achievementText"></p>
+</div>
+
     <button id="runawayBtn">Click Me!</button>
 
+    <div id="fakeContainer"></div>
+
+    <div id="gameOverScreen" hidden>
+
+    <h1>Game Over</h1>
+
+    <p>Score: <span id="finalScore"></span></p>
+
+    <p>Misses: <span id="finalMisses"></span></p>
+
+    <button onclick="location.reload()">
+        Play Again
+    </button>
+
+</div>
+    
     <script src="script.js"></script>
 
 </body>
