@@ -155,9 +155,7 @@ Catch-The-Button/
 ├── index.html
 ├── style.css
 ├── script.js
-├── README.md
-│
-└── assets/
+└── README.md
 ```
 
 ---
