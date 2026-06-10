@@ -6,10 +6,41 @@ const highScoreDisplay = document.getElementById("highScore");
 const timerDisplay = document.getElementById("timer");
 const message = document.getElementById("message");
 const fakeContainer = document.getElementById("fakeContainer");
+const shopBtn =
+    document.getElementById("shopBtn");
+
+const shop =
+    document.getElementById("shop");
+
+const closeShop =
+    document.getElementById("closeShop");
+
+const levelDisplay =
+    document.getElementById("level");
+
+const coinsDisplay =
+    document.getElementById("coins");
+
+const xpFill =
+    document.getElementById("xpFill");
 
 let score = 0;
 let misses = 0;
 let totalAttempts = 0;
+let xp = 0;
+let level =
+    parseInt(
+        localStorage.getItem("level")
+    ) || 1;
+
+let coins =
+    parseInt(
+        localStorage.getItem("coins")
+    ) || 0;
+
+const xpNeeded = 100;
+let combo = 0;
+let comboTimer;
 let fakeButtonsCreated = false;
 const isTouchDevice =
     "ontouchstart" in window ||
@@ -23,8 +54,17 @@ let gamePaused = false;
 
 let highScore =
     parseInt(localStorage.getItem("highScore")) || 0;
+const savedSkin =
+    localStorage.getItem("skin");
 
 highScoreDisplay.textContent = highScore;
+levelDisplay.textContent = level;
+coinsDisplay.textContent = coins;
+if(savedSkin){
+
+    button.style.background =
+        savedSkin;
+}
 
 const achievements = [];
 
@@ -82,6 +122,81 @@ function updateAccuracy() {
             : 0;
 
     accuracyDisplay.textContent = accuracy;
+}
+
+function addXP(amount) {
+
+    xp += amount;
+
+    if (xp > xpNeeded)
+        xp = xpNeeded;
+
+    xpFill.style.width =
+        (xp / xpNeeded) * 100 + "%";
+
+    if (xp >= xpNeeded) {
+
+        xp = 0;
+
+        level++;
+
+        levelDisplay.textContent =
+    level;
+
+localStorage.setItem(
+    "level",
+    level
+);
+
+coins += 50;
+
+        coinsDisplay.textContent =
+            coins;
+
+            localStorage.setItem(
+    "coins",
+    coins
+);
+
+        xpFill.style.width = "0%";
+
+        unlockAchievement(
+            `Level ${level} Reached`
+        );
+
+        message.textContent =
+            `⭐ Level ${level}!`;
+    }
+}
+
+function createFloatingText(text) {
+
+    const popup =
+        document.createElement("div");
+
+    popup.className =
+        "floatingText";
+
+    popup.textContent = text;
+
+    const rect =
+        button.getBoundingClientRect();
+
+    popup.style.left =
+        rect.left + rect.width / 2 + "px";
+
+    popup.style.top =
+        rect.top + "px";
+
+    document.body.appendChild(
+        popup
+    );
+
+    setTimeout(() => {
+
+        popup.remove();
+
+    }, 800);
 }
 
 function teleportButton() {
@@ -209,6 +324,21 @@ button.addEventListener("touchstart", (e) => {
 
     scoreDisplay.textContent = score;
 
+    addXP(20);
+
+coins += 5;
+
+coinsDisplay.textContent =
+    coins;
+
+localStorage.setItem(
+    "coins",
+    coins
+);
+
+createFloatingText("+20 XP");
+createFloatingText("+5 Coins");
+
     updateAccuracy();
 
     message.textContent =
@@ -254,15 +384,40 @@ button.addEventListener("click", () => {
 
     if (gameOver) return;
 
-    score++;
+    combo++;
+
+clearTimeout(comboTimer);
+
+comboTimer = setTimeout(() => {
+
+    combo = 0;
+
+}, 3000);
+
+score += combo;
     totalAttempts++;
 
     scoreDisplay.textContent = score;
 
+    addXP(20);
+
+    createFloatingText("+20 XP");
+
+coins += 5;
+createFloatingText("+5 Coins");
+
+coinsDisplay.textContent =
+    coins;
+
+    localStorage.setItem(
+    "coins",
+    coins
+);
+
     updateAccuracy();
 
     message.textContent =
-        `You got me! Score: ${score}`;
+    `🔥 Combo x${combo} | Score: ${score}`;
 
     if (score > highScore) {
 
@@ -420,3 +575,85 @@ document.addEventListener(
         }
     }
 );
+
+shopBtn.addEventListener("click", () => {
+
+    shop.hidden = false;
+});
+
+closeShop.addEventListener("click", () => {
+
+    shop.hidden = true;
+});
+
+document.getElementById(
+    "blueSkin"
+).addEventListener("click", () => {
+
+    if(coins < 50)
+        return;
+
+    coins -= 50;
+
+    coinsDisplay.textContent =
+        coins;
+
+    button.style.background =
+        "#3b82f6";
+        localStorage.setItem(
+    "skin",
+    "#3b82f6"
+);
+});
+
+document.getElementById(
+    "goldSkin"
+).addEventListener("click", () => {
+
+    if(coins < 100)
+        return;
+
+    coins -= 100;
+
+    coinsDisplay.textContent =
+        coins;
+
+    localStorage.setItem(
+        "coins",
+        coins
+    );
+
+    button.style.background =
+        "gold";
+
+        localStorage.setItem(
+    "skin",
+    "gold"
+);
+});
+
+document.getElementById(
+    "rainbowSkin"
+).addEventListener("click", () => {
+
+    if(coins < 250)
+        return;
+
+    coins -= 250;
+
+    coinsDisplay.textContent =
+        coins;
+
+    localStorage.setItem(
+        "coins",
+        coins
+    );
+
+    button.style.background =
+        "linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet)";
+
+        localStorage.setItem(
+    "skin",
+    "linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet)"
+);
+});
