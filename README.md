@@ -1,249 +1,226 @@
 # 🎯 Catch The Button
 
-A browser-based arcade game where the button actively tries to avoid being clicked.
+A fast-paced browser arcade game where the target refuses to be caught.
 
-What starts as a simple challenge quickly turns into a chaotic battle against a smart runaway button, fake buttons, increasing difficulty, achievements, and boss modes.
+The button actively escapes your cursor, unlocks new challenges as you progress, and rewards players with XP, coins, achievements, and unlockable skins.
 
 ---
 
 ## 🚀 Features
 
 ### 🎮 Core Gameplay
-- Smart runaway button
-- Cursor avoidance AI
-- Touchscreen support
-- Progressive difficulty
-- Smooth movement animations
-- Mobile and desktop compatibility
 
-### 📊 Statistics System
-- Score tracking
-- Miss counter
-- Accuracy percentage
-- Countdown timer
-- Persistent high score
-- End-of-game statistics
+* Smart runaway button AI
+* Mouse and touch support
+* Dynamic difficulty scaling
+* Smooth movement animations
+* Mobile and desktop compatibility
 
-### 🏆 Achievement System
-Unlock achievements while playing:
+### ⭐ Progression System
 
-| Achievement | Requirement |
-|------------|------------|
-| First Catch | Catch the button once |
-| Button Hunter | Reach 5 points |
-| Persistence Pays Off | Reach 10 points |
-| Professional Annoyer | Reach 25 points |
+* XP Bar
+* Leveling System
+* Coin Rewards
+* Persistent Progress Saving
+* High Score Tracking
 
-Achievements appear as animated in-game notifications.
+### 🏆 Achievements
 
-### 😈 Annoying Features
-- Random taunting messages
-- Escaping button AI
-- Fake buttons
-- Increasing difficulty
-- Boss mode mechanics
+Unlock achievements as you play:
 
-### 📱 Cross Platform Support
-- Desktop mouse controls
-- Mobile touchscreen controls
-- Responsive UI
-- Screen resize handling
-- Automatic pause when tab loses focus
+* First Catch
+* Button Hunter
+* Persistence Pays Off
+* Professional Annoyer
+* Level Milestones
 
-### 🎨 UI Features
-- Dark neon game theme
-- Animated title
-- Modern HUD
-- Achievement popups
-- Game over overlay
-- Glassmorphism stat cards
+### 🪙 Economy System
+
+Earn coins by:
+
+* Catching the button
+* Leveling up
+* Unlocking achievements
+
+Spend coins in the shop on cosmetic button skins.
+
+### 🛒 Shop
+
+Unlock skins using coins:
+
+| Skin       | Cost      |
+| ---------- | --------- |
+| 🔵 Blue    | 50 Coins  |
+| 🟡 Gold    | 100 Coins |
+| 🌈 Rainbow | 250 Coins |
+
+All purchased skins are saved using Local Storage.
+
+### 🔥 Combo System
+
+Quick consecutive catches increase your combo multiplier.
+
+Higher combos result in faster score gains.
+
+### ✨ Visual Effects
+
+* Floating XP text
+* Floating coin rewards
+* Achievement notifications
+* Boss mode animations
+* Neon HUD styling
+
+### 📊 Statistics
+
+Track:
+
+* Score
+* Misses
+* Accuracy
+* High Score
+* Coins
+* Level
+* Remaining Time
+
+### 📱 Mobile Support
+
+* Touch controls
+* Responsive UI
+* Automatic difficulty adjustments
+* Mobile-friendly button interactions
+
+### 💾 Save System
+
+The game automatically saves:
+
+* High Score
+* Coins
+* Level
+* Selected Skin
+
+using Local Storage.
+
+---
+
+# 🎯 Gameplay
+
+1. Chase the button.
+2. Catch it before it escapes.
+3. Earn XP and coins.
+4. Level up.
+5. Unlock skins.
+6. Beat your high score.
+
+---
+
+# 🎮 Difficulty Progression
+
+As your score increases:
+
+### Score 3
+
+* Escape distance increases
+
+### Score 6
+
+* Button shrinks
+* Movement becomes harder
+
+### Score 10
+
+* Fake buttons appear
+
+### Score 20+
+
+* Boss Mode activates
+* Button spins continuously
 
 ---
 
 # 🛠️ Technologies Used
 
-- HTML5
-- CSS3
-- JavaScript (Vanilla)
+* HTML5
+* CSS3
+* JavaScript (Vanilla)
 
-No external libraries or frameworks were used.
+No external libraries or frameworks.
 
 ---
 
 # 📂 Project Structure
 
 ```text
-annoying-button-game/
+Catch-The-Button/
 │
 ├── index.html
 ├── style.css
 ├── script.js
-└── README.md
+├── README.md
+│
+└── assets/
 ```
-
----
-
-# 🎯 How To Play
-
-1. Open the game in your browser.
-2. Move your cursor toward the button.
-3. Try to click it before it escapes.
-4. Earn points.
-5. Unlock achievements.
-6. Survive until the timer runs out.
-7. Beat your high score.
-
----
-
-# 🎮 Current Gameplay Progression
-
-### Level 1
-- Basic runaway button
-
-### Level 2
-- Increased escape radius
-
-### Level 3
-- Faster escapes
-- Smaller button
-
-### Level 4
-- Fake buttons appear
-
-### Boss Mode
-- Spinning button
-- Harder to catch
-- Activated at higher scores
-
----
-
-# 📈 Statistics Tracked
-
-- Score
-- Misses
-- Accuracy
-- High Score
-- Remaining Time
-
-Data is stored locally using Local Storage.
-
----
-
-# 💡 What I Learned
-
-This project helped me practice:
-
-- DOM Manipulation
-- Event Handling
-- Collision Detection
-- Game State Management
-- Responsive Design
-- Local Storage
-- CSS Animations
-- Mobile Compatibility
-- UI Design
-- JavaScript Timing Functions
 
 ---
 
 # 🔮 Planned Features
 
-The following features are planned for future releases.
+## Version 4.0
 
-## 🏠 Main Menu
-- Play button
-- Statistics page
-- Settings page
+### 🎮 Main Menu
 
-## 🎚 Difficulty Selection
-- Easy
-- Normal
-- Hard
-- Nightmare
+* Start Game
+* Statistics
+* Settings
 
-## ⭐ XP & Level System
-- Experience points
-- Level progression
-- Unlockable content
+### 🎚 Difficulty Selection
 
-## 🪙 Coin System
-- Earn coins while playing
-- Achievement rewards
-- Daily rewards
+* Easy
+* Normal
+* Hard
+* Nightmare
 
-## 🛒 Shop
-Unlock cosmetic items such as:
+### 👑 Boss Battles
 
-- Blue Button
-- Gold Button
-- Rainbow Button
-- Neon Button
+Unique boss buttons with:
 
-## 🔊 Sound Effects
-- Escape sounds
-- Click sounds
-- Achievement sounds
-- Game over sounds
+* Teleportation
+* Clones
+* Special attacks
 
-## ✨ Particle Effects
-- Click explosions
-- Escape trails
-- Achievement particles
+### 🎨 Themes
 
-## 🔥 Combo System
-- Combo multipliers
-- Bonus points
-- Speed rewards
+Unlockable game themes:
 
-## 👑 Boss Battles
-Special buttons with:
-- Teleportation
-- Clone creation
-- Color changes
-- Advanced movement patterns
+* Classic
+* Neon
+* Cyberpunk
+* Space
 
-## 🎨 Theme System
-Unlockable themes:
+### 📅 Daily Challenges
 
-- Classic
-- Dark
-- Neon
-- Cyberpunk
-- Space
+Complete daily objectives for bonus rewards.
 
-## 📅 Daily Challenges
-Examples:
+### 🏅 Statistics Page
 
-- Catch 15 buttons
-- Reach 80% accuracy
-- Survive 60 seconds
+Track:
 
-## 🏆 Leaderboards
-Future online leaderboard support.
+* Lifetime Clicks
+* Lifetime Coins
+* Total Play Time
+* Games Played
 
----
+### 🌐 Online Leaderboards
 
-# 📌 Future Vision
-
-The goal is to evolve this project from a simple runaway button experiment into a complete browser arcade game featuring:
-
-- Progression systems
-- Unlockables
-- Boss battles
-- Cosmetic customization
-- Daily challenges
-- Competitive leaderboards
-
-while remaining lightweight and playable directly in the browser.
+Compete against other players.
 
 ---
 
 # 👨‍💻 Author
 
-**Prabhat**
+Prabhat
 
-Created as a fun JavaScript game development project while exploring browser-based game mechanics.
+Built as a browser game project to explore game mechanics, UI design, JavaScript interactions, progression systems, and responsive web development.
 
 ---
 
-*"The button isn't avoiding you because it's scared. It's avoiding you because it knows exactly where your cursor is."* 😈
+*"The button knows where your cursor is. The button fears nothing."* 😈
