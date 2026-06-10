@@ -2,80 +2,181 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Catch The Button</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- Title -->
+
     <h1>🎯 Catch The Button</h1>
+
+    <!-- HUD -->
 
     <div class="stats">
 
-        <p>Score: <span id="score">0</span></p>
-        <p>Misses: <span id="misses">0</span></p>
-        <p>Accuracy: <span id="accuracy">0</span>%</p>
-        <p>High Score: <span id="highScore">0</span></p>
-        <p>Time Left: <span id="timer">60</span>s</p>
-        <p>Level: <span id="level">1</span></p>
-        <p>Coins: <span id="coins">0</span></p>
-        <button id="shopBtn">
-    🛒 Shop
-</button>
+        <p>🎯 Score: <span id="score">0</span></p>
+
+        <p>❌ Misses: <span id="misses">0</span></p>
+
+        <p>🎯 Accuracy: <span id="accuracy">0</span>%</p>
+
+        <p>🏆 High Score: <span id="highScore">0</span></p>
+
+        <p>⏳ Time: <span id="timer">60</span>s</p>
+
+        <p>⭐ Level: <span id="level">1</span></p>
+
+        <p>🪙 Coins: <span id="coins">0</span></p>
 
     </div>
 
-    <div id="xpBar">
-    <div id="xpFill"></div>
-</div>
+    <!-- XP Bar -->
 
-    <h2 id="message">Catch the button if you can!</h2>
+    <div id="xpBar">
+
+        <div id="xpFill"></div>
+
+    </div>
+
+    <!-- Menu Buttons -->
+
+    <div class="menuButtons">
+
+        <button id="shopBtn">
+            🛒 Shop
+        </button>
+
+    </div>
+
+    <!-- Status Message -->
+
+    <h2 id="message">
+
+        Catch the button if you can!
+
+    </h2>
+
+    <!-- Achievement Popup -->
 
     <div id="achievementPopup">
-    <h3>🏆 Achievement Unlocked</h3>
-    <p id="achievementText"></p>
-</div>
 
-<div id="shop" hidden>
+        <h3>
+            🏆 Achievement Unlocked
+        </h3>
 
-    <h2>Shop</h2>
+        <p id="achievementText"></p>
 
-    <button id="blueSkin">
-        🔵 Blue Button (50)
+    </div>
+
+    <!-- Shop Overlay -->
+
+    <div id="shop" hidden>
+
+        <h2>
+            🛒 Button Shop
+        </h2>
+
+        <p>
+            Spend your coins on new button skins.
+        </p>
+
+        <div class="shopGrid">
+
+            <div class="shopItem">
+
+                <h3>🔵 Blue</h3>
+
+                <p>Cost: 50 Coins</p>
+
+                <button id="blueSkin">
+                    Buy
+                </button>
+
+            </div>
+
+            <div class="shopItem">
+
+                <h3>🟡 Gold</h3>
+
+                <p>Cost: 100 Coins</p>
+
+                <button id="goldSkin">
+                    Buy
+                </button>
+
+            </div>
+
+            <div class="shopItem">
+
+                <h3>🌈 Rainbow</h3>
+
+                <p>Cost: 250 Coins</p>
+
+                <button id="rainbowSkin">
+                    Buy
+                </button>
+
+            </div>
+
+        </div>
+
+        <button id="closeShop">
+
+            Close Shop
+
+        </button>
+
+    </div>
+
+    <!-- Main Game Button -->
+
+    <button id="runawayBtn">
+
+        Click Me!
+
     </button>
 
-    <button id="goldSkin">
-        🟡 Gold Button (100)
-    </button>
-
-    <button id="rainbowSkin">
-        🌈 Rainbow Button (250)
-    </button>
-
-    <button id="closeShop">
-        Close
-    </button>
-
-</div>
-
-    <button id="runawayBtn">Click Me!</button>
+    <!-- Fake Buttons Container -->
 
     <div id="fakeContainer"></div>
 
+    <!-- Game Over Screen -->
+
     <div id="gameOverScreen" hidden>
 
-    <h1>Game Over</h1>
+        <h1>
 
-    <p>Score: <span id="finalScore"></span></p>
+            Game Over
 
-    <p>Misses: <span id="finalMisses"></span></p>
+        </h1>
 
-    <button onclick="location.reload()">
-        Play Again
-    </button>
+        <p>
 
-</div>
-    
+            Score:
+            <span id="finalScore"></span>
+
+        </p>
+
+        <p>
+
+            Misses:
+            <span id="finalMisses"></span>
+
+        </p>
+
+        <button onclick="location.reload()">
+
+            Play Again
+
+        </button>
+
+    </div>
+
     <script src="script.js"></script>
 
 </body>

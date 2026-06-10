@@ -67,31 +67,38 @@ h1 {
 
     justify-content: center;
 
-    gap: 12px;
+    gap: 15px;
 
     flex-wrap: wrap;
 
-    margin-bottom: 15px;
+    max-width: 1400px;
+
+    margin: 20px auto;
 }
 
 .stats p {
 
-    background:
-        rgba(255,255,255,0.1);
+    min-width: 140px;
 
-    backdrop-filter: blur(8px);
+    padding: 14px 20px;
+
+    margin: 0;
+
+    border-radius: 16px;
+
+    background:
+        rgba(255,255,255,0.08);
+
+    backdrop-filter:
+        blur(10px);
 
     border:
-        1px solid rgba(255,255,255,0.2);
-
-    border-radius: 12px;
-
-    padding: 10px 18px;
-
-    min-width: 110px;
+        1px solid rgba(255,255,255,0.15);
 
     box-shadow:
-        0 0 10px rgba(0,255,255,0.15);
+        0 0 15px rgba(0,255,255,.1);
+
+    font-weight: bold;
 }
 
 /* Message */
@@ -100,14 +107,16 @@ h1 {
 
     min-height: 50px;
 
+    margin-bottom: 50px;
+
     color: #facc15;
 
-    font-size: 1.3rem;
+    font-size: 1.5rem;
 
     font-weight: bold;
 
     text-shadow:
-        0 0 10px #facc15;
+        0 0 15px #facc15;
 }
 
 /* Main Button */
@@ -317,19 +326,23 @@ h1 {
 }
 #xpBar {
 
-    width: 500px;
+    width: 700px;
 
     max-width: 90%;
 
-    height: 20px;
+    height: 24px;
 
-    margin: 15px auto;
+    margin: 20px auto;
 
-    background: rgba(255,255,255,0.1);
+    background:
+        rgba(255,255,255,0.08);
 
-    border-radius: 20px;
+    border-radius: 50px;
 
     overflow: hidden;
+
+    box-shadow:
+        0 0 15px rgba(0,255,255,.2);
 }
 
 #xpFill {
@@ -341,11 +354,12 @@ h1 {
     background:
         linear-gradient(
             90deg,
-            cyan,
-            #22d3ee
+            #06b6d4,
+            #3b82f6
         );
 
-    transition: width .3s;
+    transition:
+        width .3s;
 }
 .floatingText {
 
@@ -389,17 +403,18 @@ h1 {
     inset: 0;
 
     background:
-        rgba(0,0,0,.9);
+        rgba(5,10,25,.95);
+
+    backdrop-filter:
+        blur(10px);
+
+    z-index: 1200;
 
     flex-direction: column;
 
     justify-content: center;
 
     align-items: center;
-
-    gap: 15px;
-
-    z-index: 1200;
 }
 
 #shop:not([hidden]) {
@@ -407,9 +422,155 @@ h1 {
     display: flex;
 }
 
-#shop button {
+#shopBtn {
 
-    padding: 12px 20px;
+    border: none;
+
+    border-radius: 16px;
+
+    padding: 14px 28px;
 
     font-size: 1rem;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            45deg,
+            #06b6d4,
+            #3b82f6
+        );
+
+    box-shadow:
+        0 0 20px rgba(59,130,246,.4);
+
+    transition:
+        .3s;
+}
+
+#shopBtn:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 0 30px rgba(59,130,246,.8);
+}
+
+.menuButtons {
+
+    display: flex;
+
+    justify-content: center;
+
+    margin: 20px 0;
+}
+
+#shop h2 {
+
+    font-size: 3rem;
+
+    margin-bottom: 10px;
+
+    color: cyan;
+
+    text-shadow:
+        0 0 20px cyan;
+}
+
+#shop p {
+
+    opacity: .8;
+}
+
+.shopGrid {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    gap: 25px;
+
+    margin: 30px 0;
+}
+
+.shopItem {
+
+    width: 220px;
+
+    padding: 20px;
+
+    border-radius: 20px;
+
+    background:
+        rgba(255,255,255,0.08);
+
+    backdrop-filter:
+        blur(10px);
+
+    border:
+        1px solid rgba(255,255,255,0.15);
+
+    text-align: center;
+
+    box-shadow:
+        0 0 20px rgba(255,255,255,.05);
+
+    transition:
+        .3s;
+}
+
+.shopItem:hover {
+
+    transform:
+        translateY(-5px);
+
+    box-shadow:
+        0 0 30px rgba(0,255,255,.2);
+}
+
+.shopItem button {
+
+    border: none;
+
+    border-radius: 12px;
+
+    padding: 10px 20px;
+
+    cursor: pointer;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            45deg,
+            #22c55e,
+            #16a34a
+        );
+}
+
+#closeShop {
+
+    border: none;
+
+    border-radius: 12px;
+
+    padding: 12px 25px;
+
+    cursor: pointer;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            45deg,
+            #ef4444,
+            #dc2626
+        );
 }
