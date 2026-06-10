@@ -6,6 +6,10 @@ const highScoreDisplay = document.getElementById("highScore");
 const timerDisplay = document.getElementById("timer");
 const message = document.getElementById("message");
 const fakeContainer = document.getElementById("fakeContainer");
+const gameArena =
+    document.getElementById(
+        "gameArena"
+    );
 const shopBtn =
     document.getElementById("shopBtn");
 
@@ -14,6 +18,15 @@ const shop =
 
 const closeShop =
     document.getElementById("closeShop");
+
+const statsBtn =
+    document.getElementById("statsBtn");
+
+const statsScreen =
+    document.getElementById("statsScreen");
+
+const closeStats =
+    document.getElementById("closeStats");
 
 const levelDisplay =
     document.getElementById("level");
@@ -54,6 +67,27 @@ let gamePaused = false;
 
 let highScore =
     parseInt(localStorage.getItem("highScore")) || 0;
+
+let gamesPlayed =
+    parseInt(
+        localStorage.getItem(
+            "gamesPlayed"
+        )
+    ) || 0;
+
+let lifetimeClicks =
+    parseInt(
+        localStorage.getItem(
+            "lifetimeClicks"
+        )
+    ) || 0;
+
+let lifetimeCoins =
+    parseInt(
+        localStorage.getItem(
+            "lifetimeCoins"
+        )
+    ) || 0; 
 const savedSkin =
     localStorage.getItem("skin");
 
@@ -169,13 +203,22 @@ coins += 50;
     }
 }
 
-function createFloatingText(text) {
+function createFloatingText(
+    text,
+    offset = 0
+) {
 
     const popup =
         document.createElement("div");
 
     popup.className =
         "floatingText";
+
+    if(text.includes("Coins")){
+
+    popup.style.color =
+        "#facc15";
+}
 
     popup.textContent = text;
 
@@ -186,7 +229,7 @@ function createFloatingText(text) {
         rect.left + rect.width / 2 + "px";
 
     popup.style.top =
-        rect.top + "px";
+    rect.top + offset + "px";
 
     document.body.appendChild(
         popup
@@ -203,11 +246,14 @@ function teleportButton() {
 
     const rect = button.getBoundingClientRect();
 
-    const maxX =
-        window.innerWidth - rect.width;
+    const arenaRect =
+    gameArena.getBoundingClientRect();
 
-    const maxY =
-        window.innerHeight - rect.height;
+const maxX =
+    arenaRect.width - rect.width;
+
+const maxY =
+    arenaRect.height - rect.height;
 
     button.style.left =
         Math.random() * maxX + "px";
@@ -232,13 +278,16 @@ function createFakeButtons() {
         fake.innerText = "Click Me!";
         fake.className = "fakeButton";
 
-        fake.style.left =
-            Math.random() *
-            (window.innerWidth - 150) + "px";
+        const arenaRect =
+    gameArena.getBoundingClientRect();
 
-        fake.style.top =
-            Math.random() *
-            (window.innerHeight - 150) + "px";
+fake.style.left =
+    Math.random() *
+    (arenaRect.width - 150) + "px";
+
+fake.style.top =
+    Math.random() *
+    (arenaRect.height - 150) + "px";
 
         fake.addEventListener("click", () => {
 
@@ -289,21 +338,24 @@ document.addEventListener("mousemove", (e) => {
             (dy / distance) *
             escapeDistance;
 
-        newX = Math.max(
-            0,
-            Math.min(
-                newX,
-                window.innerWidth - rect.width
-            )
-        );
+        const arenaRect =
+    gameArena.getBoundingClientRect();
 
-        newY = Math.max(
-            0,
-            Math.min(
-                newY,
-                window.innerHeight - rect.height
-            )
-        );
+newX = Math.max(
+    0,
+    Math.min(
+        newX,
+        arenaRect.width - rect.width
+    )
+);
+
+newY = Math.max(
+    0,
+    Math.min(
+        newY,
+        arenaRect.height - rect.height
+    )
+);
 
         button.style.left = newX + "px";
         button.style.top = newY + "px";
@@ -320,6 +372,12 @@ button.addEventListener("touchstart", (e) => {
         return;
 
     score++;
+    lifetimeClicks++;
+
+localStorage.setItem(
+    "lifetimeClicks",
+    lifetimeClicks
+);
     totalAttempts++;
 
     scoreDisplay.textContent = score;
@@ -336,8 +394,9 @@ localStorage.setItem(
     coins
 );
 
-createFloatingText("+20 XP");
-createFloatingText("+5 Coins");
+createFloatingText(
+    "+20 XP | +5 Coins"
+);
 
     updateAccuracy();
 
@@ -395,16 +454,38 @@ comboTimer = setTimeout(() => {
 }, 3000);
 
 score += combo;
+
+lifetimeClicks++;
+
+localStorage.setItem(
+    "lifetimeClicks",
+    lifetimeClicks
+);
+
     totalAttempts++;
 
     scoreDisplay.textContent = score;
 
     addXP(20);
 
-    createFloatingText("+20 XP");
+    createFloatingText(
+    "+20 XP",
+    -15
+);
 
 coins += 5;
-createFloatingText("+5 Coins");
+
+lifetimeCoins += 5;
+
+localStorage.setItem(
+    "lifetimeCoins",
+    lifetimeCoins
+);
+
+createFloatingText(
+    "+5 Coins",
+    15
+);
 
 coinsDisplay.textContent =
     coins;
@@ -495,6 +576,13 @@ function showGameOver() {
             "gameOverScreen"
         );
 
+    gamesPlayed++;
+
+localStorage.setItem(
+    "gamesPlayed",
+    gamesPlayed
+);
+
     screen.removeAttribute("hidden");
 
     document.getElementById(
@@ -537,11 +625,14 @@ window.addEventListener("load", () => {
     const rect =
         button.getBoundingClientRect();
 
-    button.style.left =
-        (window.innerWidth - rect.width) / 2 + "px";
+    const arenaRect =
+    gameArena.getBoundingClientRect();
 
-    button.style.top =
-        (window.innerHeight - rect.height) / 2 + "px";
+button.style.left =
+    (arenaRect.width - rect.width) / 2 + "px";
+
+button.style.top =
+    (arenaRect.height - rect.height) / 2 + "px";
 });
 
 window.addEventListener("resize", () => {
@@ -549,16 +640,19 @@ window.addEventListener("resize", () => {
     const rect =
         button.getBoundingClientRect();
 
+    const arenaRect =
+        gameArena.getBoundingClientRect();
+
     button.style.left =
         Math.min(
             button.offsetLeft,
-            window.innerWidth - rect.width
+            arenaRect.width - rect.width
         ) + "px";
 
     button.style.top =
         Math.min(
             button.offsetTop,
-            window.innerHeight - rect.height
+            arenaRect.height - rect.height
         ) + "px";
 });
 
@@ -649,11 +743,37 @@ document.getElementById(
         coins
     );
 
-    button.style.background =
-        "linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet)";
+    button.style.backgroundImage =
+    "linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet)";
 
         localStorage.setItem(
     "skin",
     "linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet)"
 );
+});
+
+statsBtn.addEventListener("click", () => {
+
+    document.getElementById(
+        "gamesPlayedStat"
+    ).textContent = gamesPlayed;
+
+    document.getElementById(
+        "lifetimeClicksStat"
+    ).textContent = lifetimeClicks;
+
+    document.getElementById(
+        "lifetimeCoinsStat"
+    ).textContent = lifetimeCoins;
+
+    document.getElementById(
+        "highestLevelStat"
+    ).textContent = level;
+
+    statsScreen.hidden = false;
+});
+
+closeStats.addEventListener("click", () => {
+
+    statsScreen.hidden = true;
 });

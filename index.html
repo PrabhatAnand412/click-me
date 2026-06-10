@@ -2,182 +2,212 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catch The Button</title>
-
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Title -->
+<div id="layout">
 
-    <h1>🎯 Catch The Button</h1>
+    <!-- Sidebar -->
 
-    <!-- HUD -->
+    <aside id="sidebar">
 
-    <div class="stats">
+        <h1>🎯 Catch</h1>
 
-        <p>🎯 Score: <span id="score">0</span></p>
+        <div class="sidebarCard">
+            🎯 Score
+            <span id="score">0</span>
+        </div>
 
-        <p>❌ Misses: <span id="misses">0</span></p>
+        <div class="sidebarCard">
+            ⭐ Level
+            <span id="level">1</span>
+        </div>
 
-        <p>🎯 Accuracy: <span id="accuracy">0</span>%</p>
+        <div class="sidebarCard">
+            🪙 Coins
+            <span id="coins">0</span>
+        </div>
 
-        <p>🏆 High Score: <span id="highScore">0</span></p>
+        <div class="sidebarCard">
+            ⏳ Time
+            <span id="timer">60</span>
+        </div>
 
-        <p>⏳ Time: <span id="timer">60</span>s</p>
+        <div id="xpBar">
+            <div id="xpFill"></div>
+        </div>
 
-        <p>⭐ Level: <span id="level">1</span></p>
+        <div class="sidebarButtons">
 
-        <p>🪙 Coins: <span id="coins">0</span></p>
+            <button id="shopBtn">
+                🛒 Shop
+            </button>
 
-    </div>
-
-    <!-- XP Bar -->
-
-    <div id="xpBar">
-
-        <div id="xpFill"></div>
-
-    </div>
-
-    <!-- Menu Buttons -->
-
-    <div class="menuButtons">
-
-        <button id="shopBtn">
-            🛒 Shop
-        </button>
-
-    </div>
-
-    <!-- Status Message -->
-
-    <h2 id="message">
-
-        Catch the button if you can!
-
-    </h2>
-
-    <!-- Achievement Popup -->
-
-    <div id="achievementPopup">
-
-        <h3>
-            🏆 Achievement Unlocked
-        </h3>
-
-        <p id="achievementText"></p>
-
-    </div>
-
-    <!-- Shop Overlay -->
-
-    <div id="shop" hidden>
-
-        <h2>
-            🛒 Button Shop
-        </h2>
-
-        <p>
-            Spend your coins on new button skins.
-        </p>
-
-        <div class="shopGrid">
-
-            <div class="shopItem">
-
-                <h3>🔵 Blue</h3>
-
-                <p>Cost: 50 Coins</p>
-
-                <button id="blueSkin">
-                    Buy
-                </button>
-
-            </div>
-
-            <div class="shopItem">
-
-                <h3>🟡 Gold</h3>
-
-                <p>Cost: 100 Coins</p>
-
-                <button id="goldSkin">
-                    Buy
-                </button>
-
-            </div>
-
-            <div class="shopItem">
-
-                <h3>🌈 Rainbow</h3>
-
-                <p>Cost: 250 Coins</p>
-
-                <button id="rainbowSkin">
-                    Buy
-                </button>
-
-            </div>
+            <button id="statsBtn">
+                📊 Statistics
+            </button>
 
         </div>
 
-        <button id="closeShop">
+        <h3 id="message">
+            Catch the button if you can!
+        </h3>
 
-            Close Shop
+    </aside>
 
+    <!-- Arena -->
+
+    <main id="gameArena">
+
+        <button id="runawayBtn">
+            Click Me!
         </button>
 
-    </div>
+        <div id="fakeContainer"></div>
 
-    <!-- Main Game Button -->
+    </main>
 
-    <button id="runawayBtn">
+</div>
 
-        Click Me!
+<!-- Achievement Popup -->
 
+<div id="achievementPopup">
+
+    <h3>🏆 Achievement Unlocked</h3>
+
+    <p id="achievementText"></p>
+
+</div>
+
+<!-- Statistics -->
+
+<div id="statsScreen" hidden>
+
+    <h2>📊 Statistics</h2>
+
+    <p>
+        Games Played:
+        <span id="gamesPlayedStat">0</span>
+    </p>
+
+    <p>
+        Lifetime Clicks:
+        <span id="lifetimeClicksStat">0</span>
+    </p>
+
+    <p>
+        Lifetime Coins:
+        <span id="lifetimeCoinsStat">0</span>
+    </p>
+
+    <p>
+        Highest Level:
+        <span id="highestLevelStat">1</span>
+    </p>
+
+    <p>
+        High Score:
+        <span id="highScore">0</span>
+    </p>
+
+    <p>
+        Accuracy:
+        <span id="accuracy">0</span>%
+    </p>
+
+    <p>
+        Misses:
+        <span id="misses">0</span>
+    </p>
+
+    <button id="closeStats">
+        Close
     </button>
 
-    <!-- Fake Buttons Container -->
+</div>
 
-    <div id="fakeContainer"></div>
+<!-- Shop -->
 
-    <!-- Game Over Screen -->
+<div id="shop" hidden>
 
-    <div id="gameOverScreen" hidden>
+    <h2>🛒 Button Shop</h2>
 
-        <h1>
+    <p>
+        Spend your coins on new button skins.
+    </p>
 
-            Game Over
+    <div class="shopGrid">
 
-        </h1>
+        <div class="shopItem">
 
-        <p>
+            <h3>🔵 Blue</h3>
 
-            Score:
-            <span id="finalScore"></span>
+            <p>50 Coins</p>
 
-        </p>
+            <button id="blueSkin">
+                Buy
+            </button>
 
-        <p>
+        </div>
 
-            Misses:
-            <span id="finalMisses"></span>
+        <div class="shopItem">
 
-        </p>
+            <h3>🟡 Gold</h3>
 
-        <button onclick="location.reload()">
+            <p>100 Coins</p>
 
-            Play Again
+            <button id="goldSkin">
+                Buy
+            </button>
 
-        </button>
+        </div>
+
+        <div class="shopItem">
+
+            <h3>🌈 Rainbow</h3>
+
+            <p>250 Coins</p>
+
+            <button id="rainbowSkin">
+                Buy
+            </button>
+
+        </div>
 
     </div>
 
-    <script src="script.js"></script>
+    <button id="closeShop">
+        Close Shop
+    </button>
+
+</div>
+
+<!-- Game Over -->
+
+<div id="gameOverScreen" hidden>
+
+    <h1>Game Over</h1>
+
+    <p>
+        Score:
+        <span id="finalScore"></span>
+    </p>
+
+    <p>
+        Misses:
+        <span id="finalMisses"></span>
+    </p>
+
+    <button onclick="location.reload()">
+        Play Again
+    </button>
+
+</div>
+
+<script src="script.js"></script>
 
 </body>
 </html>

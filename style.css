@@ -14,6 +14,13 @@ body {
     color: white;
 }
 
+#layout {
+
+    display: flex;
+
+    height: 100vh;
+}
+
 /* Animated background */
 
 body::before {
@@ -59,46 +66,75 @@ h1 {
     }
 }
 
-/* Stats HUD */
+/* Sidebar HUD */
 
-.stats {
+#sidebar {
+
+    width: 220px;
+
+    min-height: 100vh;
+
+    flex-shrink: 0;
+
+    padding: 15px;
+
+    background:
+        rgba(0,0,0,.25);
+
+    backdrop-filter:
+        blur(12px);
+
+    border-right:
+        1px solid rgba(255,255,255,.08);
 
     display: flex;
 
-    justify-content: center;
+    flex-direction: column;
 
-    gap: 15px;
-
-    flex-wrap: wrap;
-
-    max-width: 1400px;
-
-    margin: 20px auto;
+    gap: 12px;
 }
 
-.stats p {
-
-    min-width: 140px;
-
-    padding: 14px 20px;
+#sidebar h1 {
 
     margin: 0;
 
-    border-radius: 16px;
+    font-size: 2rem;
+
+    text-align: center;
+}
+
+.sidebarCard {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 12px;
+
+    border-radius: 12px;
 
     background:
-        rgba(255,255,255,0.08);
-
-    backdrop-filter:
-        blur(10px);
+        rgba(255,255,255,.08);
 
     border:
-        1px solid rgba(255,255,255,0.15);
+        1px solid rgba(255,255,255,.1);
+
+    transition:
+        .25s;
+}
+
+.sidebarCard:hover {
+
+    transform:
+        translateY(-2px);
+
+    border-color:
+        rgba(0,255,255,.4);
 
     box-shadow:
-        0 0 15px rgba(0,255,255,.1);
-
-    font-weight: bold;
+        0 0 12px rgba(0,255,255,.2);
 }
 
 /* Message */
@@ -107,19 +143,38 @@ h1 {
 
     min-height: 50px;
 
-    margin-bottom: 50px;
+    text-align: center;
 
-    color: #facc15;
-
-    font-size: 1.5rem;
-
-    font-weight: bold;
-
-    text-shadow:
-        0 0 15px #facc15;
+    font-size: 1rem;
 }
 
 /* Main Button */
+
+#gameArena {
+
+    flex: 1;
+
+    position: relative;
+
+    margin: 15px;
+
+    border-radius: 25px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.02),
+            rgba(0,255,255,.03)
+        );
+
+    border:
+        2px solid rgba(0,255,255,.15);
+
+    box-shadow:
+        inset 0 0 30px rgba(0,255,255,.08);
+}
 
 #runawayBtn {
 
@@ -293,18 +348,6 @@ h1 {
         font-size: 2rem;
     }
 
-    .stats {
-
-        gap: 8px;
-    }
-
-    .stats p {
-
-        min-width: 80px;
-
-        font-size: 0.9rem;
-    }
-
     #message {
 
         font-size: 1rem;
@@ -326,23 +369,16 @@ h1 {
 }
 #xpBar {
 
-    width: 700px;
+    width: 100%;
 
-    max-width: 90%;
+    height: 20px;
 
-    height: 24px;
-
-    margin: 20px auto;
-
-    background:
-        rgba(255,255,255,0.08);
-
-    border-radius: 50px;
+    border-radius: 20px;
 
     overflow: hidden;
 
-    box-shadow:
-        0 0 15px rgba(0,255,255,.2);
+    background:
+        rgba(255,255,255,.08);
 }
 
 #xpFill {
@@ -422,7 +458,22 @@ h1 {
     display: flex;
 }
 
-#shopBtn {
+.sidebarButtons {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.sidebarButtons button {
+
+    width: 100%;
+}
+
+#shopBtn,
+#statsBtn {
 
     border: none;
 
@@ -452,22 +503,14 @@ h1 {
         .3s;
 }
 
-#shopBtn:hover {
+#shopBtn:hover,
+#statsBtn:hover {
 
     transform:
         translateY(-2px);
 
     box-shadow:
         0 0 30px rgba(59,130,246,.8);
-}
-
-.menuButtons {
-
-    display: flex;
-
-    justify-content: center;
-
-    margin: 20px 0;
 }
 
 #shop h2 {
@@ -573,4 +616,75 @@ h1 {
             #ef4444,
             #dc2626
         );
+}
+
+#statsScreen {
+
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(5,10,25,.95);
+
+    z-index: 1500;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 15px;
+}
+
+#statsScreen:not([hidden]) {
+
+    display: flex;
+}
+
+#statsScreen h2 {
+
+    color: cyan;
+
+    font-size: 3rem;
+}
+
+#statsScreen p {
+
+    font-size: 1.2rem;
+}
+
+#closeStats {
+
+    padding: 12px 25px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+
+    #layout {
+
+        flex-direction: column;
+    }
+
+    #sidebar {
+
+        width: auto;
+
+        border-right: none;
+
+        border-bottom:
+            1px solid rgba(255,255,255,.1);
+    }
+
+    #gameArena {
+
+        margin: 10px;
+    }
 }
