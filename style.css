@@ -754,3 +754,14 @@ h1 {
             scale(1.1);
     }
 }
+
+#powerupStatus {
+
+    min-height: 50px;
+
+    justify-content: center;
+
+    text-align: center;
+
+    font-size: .9rem;
+}

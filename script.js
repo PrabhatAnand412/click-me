@@ -42,6 +42,11 @@ const coinsDisplay =
 const xpFill =
     document.getElementById("xpFill");
 
+const powerupStatus =
+    document.getElementById(
+        "powerupStatus"
+    );
+
 let score = 0;
 let misses = 0;
 let totalAttempts = 0;
@@ -111,8 +116,16 @@ levelDisplay.textContent = level;
 coinsDisplay.textContent = coins;
 if(savedSkin){
 
-    button.style.background =
-        savedSkin;
+    if(savedSkin.includes("linear-gradient")){
+
+        button.style.backgroundImage =
+            savedSkin;
+
+    } else {
+
+        button.style.background =
+            savedSkin;
+    }
 }
 
 const achievements = [];
@@ -251,12 +264,19 @@ localStorage.setItem(
 
 coins += 50;
 
-        coinsDisplay.textContent =
-            coins;
+lifetimeCoins += 50;
 
-            localStorage.setItem(
+coinsDisplay.textContent =
+    coins;
+
+localStorage.setItem(
     "coins",
     coins
+);
+
+localStorage.setItem(
+    "lifetimeCoins",
+    lifetimeCoins
 );
 
         xpFill.style.width = "0%";
@@ -418,45 +438,76 @@ function activatePowerup(type){
 
     if(type === "xp"){
 
-        doubleXP = true;
+    doubleXP = true;
 
-        message.textContent =
-            "⭐ Double XP";
+    updatePowerupStatus();
 
-        setTimeout(() => {
+    message.textContent =
+        "⭐ Double XP";
 
-            doubleXP = false;
+    setTimeout(() => {
 
-        }, 10000);
-    }
+        doubleXP = false;
+
+        updatePowerupStatus();
+
+    }, 10000);
+}
 
     if(type === "coins"){
 
-        doubleCoins = true;
+    doubleCoins = true;
 
-        message.textContent =
-            "🪙 Double Coins";
+    updatePowerupStatus();
 
-        setTimeout(() => {
+    message.textContent =
+        "🪙 Double Coins";
 
-            doubleCoins = false;
+    setTimeout(() => {
 
-        }, 10000);
-    }
+        doubleCoins = false;
+
+        updatePowerupStatus();
+
+    }, 10000);
+}
 
     if(type === "slow"){
 
-        slowButton = true;
+    slowButton = true;
 
-        message.textContent =
-            "⚡ Slow Button";
+    updatePowerupStatus();
 
-        setTimeout(() => {
+    message.textContent =
+        "⚡ Slow Button";
 
-            slowButton = false;
+    setTimeout(() => {
 
-        }, 10000);
-    }
+        slowButton = false;
+
+        updatePowerupStatus();
+
+    }, 10000);
+}
+}
+
+function updatePowerupStatus() {
+
+    const active = [];
+
+    if(doubleXP)
+        active.push("⭐ Double XP");
+
+    if(doubleCoins)
+        active.push("🪙 Double Coins");
+
+    if(slowButton)
+        active.push("⚡ Slow Button");
+
+    powerupStatus.textContent =
+        active.length
+            ? active.join(" | ")
+            : "No Active Powerups";
 }
 
 document.addEventListener("mousemove", (e) => {
@@ -485,7 +536,10 @@ document.addEventListener("mousemove", (e) => {
 
     if (distance < dangerDistance) {
 
-        const escapeDistance = 150;
+        const escapeDistance =
+    slowButton
+        ? 75
+        : 150;
 
         let newX =
             button.offsetLeft -
@@ -541,11 +595,21 @@ localStorage.setItem(
 
     scoreDisplay.textContent = score;
 
-    addXP(xpReward);
+    addXP(
+    doubleXP
+        ? xpReward * 2
+        : xpReward
+);
 
-coins += coinReward;
+coins +=
+    doubleCoins
+        ? coinReward * 2
+        : coinReward;
 
-lifetimeCoins += coinReward;
+lifetimeCoins +=
+    doubleCoins
+        ? coinReward * 2
+        : coinReward;
 
 localStorage.setItem(
     "lifetimeCoins",
@@ -561,7 +625,15 @@ localStorage.setItem(
 );
 
 createFloatingText(
-    `+${xpReward} XP | +${coinReward} Coins`
+    `+${
+        doubleXP
+            ? xpReward * 2
+            : xpReward
+    } XP | +${
+        doubleCoins
+            ? coinReward * 2
+            : coinReward
+    } Coins`
 );
 
     updateAccuracy();
@@ -584,10 +656,10 @@ createFloatingText(
 
     setTimeout(() => {
 
-        if(!gameOver)
-            teleportButton();
+    if(!gameOver)
+        teleportButton();
 
-    }, 120);
+}, slowButton ? 300 : 120);
 });
 
 document.addEventListener("click", (e) => {
@@ -632,11 +704,21 @@ localStorage.setItem(
 
     scoreDisplay.textContent = score;
 
-addXP(xpReward);
+addXP(
+    doubleXP
+        ? xpReward * 2
+        : xpReward
+);
 
-coins += coinReward;
+coins +=
+    doubleCoins
+        ? coinReward * 2
+        : coinReward;
 
-lifetimeCoins += coinReward;
+lifetimeCoins +=
+    doubleCoins
+        ? coinReward * 2
+        : coinReward;
 
 localStorage.setItem(
     "lifetimeCoins",
@@ -644,7 +726,15 @@ localStorage.setItem(
 );
 
 createFloatingText(
-    `+${xpReward} XP | +${coinReward} Coins`
+    `+${
+        doubleXP
+            ? xpReward * 2
+            : xpReward
+    } XP | +${
+        doubleCoins
+            ? coinReward * 2
+            : coinReward
+    } Coins`
 );
 
 coinsDisplay.textContent =
@@ -777,6 +867,7 @@ const timer = setInterval(() => {
 window.addEventListener("load", () => {
 
 applyDifficulty();
+updatePowerupStatus();
 
     const rect =
         button.getBoundingClientRect();
