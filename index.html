@@ -1,335 +1,235 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Catch The Button</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <div id="mainMenu">
+      <div class="menuCard">
+        <h1>Catch The Button</h1>
 
-    <div class="menuCard">
+        <p>Can you catch the world's most annoying button?</p>
 
-        <h1>
-            Catch The Button
-        </h1>
+        <button id="playBtn">▶ Play</button>
 
-        <p>
-            Can you catch the world's most annoying button?
-        </p>
+        <button id="menuStatsBtn">📊 Statistics</button>
 
-        <button id="playBtn">
-            ▶ Play
-        </button>
-
-        <button id="menuStatsBtn">
-            📊 Statistics
-        </button>
-
-        <button id="menuShopBtn">
-            🛒 Shop
-        </button>
-
+        <button id="menuShopBtn">🛒 Shop</button>
+      </div>
     </div>
 
-</div>
+    <div id="layout" hidden>
+      <!-- Sidebar -->
 
-<div id="layout" hidden>
-
-    <!-- Sidebar -->
-
-    <aside id="sidebar">
-
+      <aside id="sidebar">
         <h1>🎯 Catch</h1>
 
         <div class="sidebarCard">
-            🎯 Score
-            <span id="score">0</span>
+          🎯 Score
+          <span id="score">0</span>
         </div>
 
         <div class="sidebarCard">
-            ⭐ Level
-            <span id="level">1</span>
+          ⭐ Level
+          <span id="level">1</span>
         </div>
 
         <div class="sidebarCard">
-            🪙 Coins
-            <span id="coins">0</span>
+          🪙 Coins
+          <span id="coins">0</span>
         </div>
 
         <div class="sidebarCard">
-            ⏳ Time
-            <span id="timer">60</span>
+          ⏳ Time
+          <span id="timer">60</span>
         </div>
 
         <div id="xpBar">
-            <div id="xpFill"></div>
+          <div id="xpFill"></div>
         </div>
 
         <div class="sidebarCard difficultyCard">
+          <label for="difficultySelect"> 🎚 Difficulty </label>
 
-    <label for="difficultySelect">
-        🎚 Difficulty
-    </label>
+          <select id="difficultySelect">
+            <option value="easy">Easy</option>
 
-    <select id="difficultySelect">
+            <option value="normal" selected>Normal</option>
 
-        <option value="easy">
-            Easy
-        </option>
+            <option value="hard">Hard</option>
 
-        <option value="normal" selected>
-            Normal
-        </option>
+            <option value="nightmare">Nightmare</option>
+          </select>
+        </div>
 
-        <option value="hard">
-            Hard
-        </option>
+        <div class="sidebarButtons">
+          <button id="shopBtn">🛒 Shop</button>
 
-        <option value="nightmare">
-            Nightmare
-        </option>
+          <button id="statsBtn">📊 Statistics</button>
+        </div>
 
-    </select>
+        <h3 id="message">Catch the button if you can!</h3>
 
-</div>
+        <div class="sidebarCard" id="powerupStatus">No Active Powerups</div>
+      </aside>
 
-<div class="sidebarButtons">
+      <!-- Arena -->
 
-    <button id="shopBtn">
-        🛒 Shop
-    </button>
-
-    <button id="statsBtn">
-        📊 Statistics
-    </button>
-
-</div>
-
-        <h3 id="message">
-            Catch the button if you can!
-        </h3>
-
-        <div class="sidebarCard" id="powerupStatus">
-
-    No Active Powerups
-
-</div>
-
-    </aside>
-
-    <!-- Arena -->
-
-    <main id="gameArena">
-
-        <button id="runawayBtn">
-            Click Me!
-        </button>
+      <main id="gameArena">
+        <button id="runawayBtn">Click Me!</button>
 
         <div id="fakeContainer"></div>
-
-    </main>
-
-</div>
-
-<!-- Achievement Popup -->
-
-<div id="achievementPopup">
-
-    <h3>🏆 Achievement Unlocked</h3>
-
-    <p id="achievementText"></p>
-
-</div>
-
-<!-- Statistics -->
-
-<div id="statsScreen" hidden>
-
-    <h2>📊 Statistics</h2>
-
-    <p>
-        Games Played:
-        <span id="gamesPlayedStat">0</span>
-    </p>
-
-    <p>
-        Lifetime Clicks:
-        <span id="lifetimeClicksStat">0</span>
-    </p>
-
-    <p>
-        Lifetime Coins:
-        <span id="lifetimeCoinsStat">0</span>
-    </p>
-
-    <p>
-        Highest Level:
-        <span id="highestLevelStat">1</span>
-    </p>
-
-    <p>
-        High Score:
-        <span id="highScore">0</span>
-    </p>
-
-    <p>
-        Accuracy:
-        <span id="accuracy">0</span>%
-    </p>
-
-    <p>
-        Misses:
-        <span id="misses">0</span>
-    </p>
-
-    <button id="closeStats">
-        Close
-    </button>
-
-</div>
-
-<!-- Shop -->
-
-<div id="shop" hidden>
-
-    <h2>🛒 Button Shop</h2>
-
-    <p>
-        Spend your coins on new button skins.
-    </p>
-
-    <div class="shopGrid">
-
-        <div class="shopItem">
-
-            <h3>🔵 Blue</h3>
-
-            <p>50 Coins</p>
-
-            <button id="blueSkin">
-                Buy
-            </button>
-
-        </div>
-
-        <div class="shopItem">
-
-            <h3>🟡 Gold</h3>
-
-            <p>100 Coins</p>
-
-            <button id="goldSkin">
-                Buy
-            </button>
-
-        </div>
-
-        <div class="shopItem">
-
-            <h3>🌈 Rainbow</h3>
-
-            <p>250 Coins</p>
-
-            <button id="rainbowSkin">
-                Buy
-            </button>
-
-        </div>
-
-        <div class="shopItem">
-
-    <h3>🌌 Space Theme</h3>
-
-    <p>Cost: 500 Coins</p>
-
-    <button id="spaceTheme">
-        Buy
-    </button>
-
-</div>
-
-<div class="shopItem">
-
-    <h3>🌊 Ocean Theme</h3>
-
-    <p>Cost: 750 Coins</p>
-
-    <button id="oceanTheme">
-        Buy
-    </button>
-
-</div>
-
-<div class="shopItem">
-
-    <h3>🔥 Lava Theme</h3>
-
-    <p>Cost: 1000 Coins</p>
-
-    <button id="lavaTheme">
-        Buy
-    </button>
-
-</div>
-
-<div class="shopItem">
-
-    <h3>🌲 Forest Theme</h3>
-
-    <p>Cost: 1250 Coins</p>
-
-    <button id="forestTheme">
-        Buy
-    </button>
-
-</div>
-
-<div class="shopItem">
-
-    <h3>🎨 Default Theme</h3>
-
-    <p>Free</p>
-
-    <button id="defaultTheme">
-        Selected
-    </button>
-
-</div>
-
+      </main>
     </div>
 
-    <button id="closeShop">
-        Close Shop
-    </button>
+    <!-- Achievement Popup -->
 
-</div>
+    <div id="achievementPopup">
+      <h3>🏆 Achievement Unlocked</h3>
 
-<!-- Game Over -->
+      <p id="achievementText"></p>
+    </div>
 
-<div id="gameOverScreen" hidden>
+    <!-- Statistics -->
 
-    <h1>Game Over</h1>
+    <div id="statsScreen" hidden>
+      <h2>📊 Statistics</h2>
 
-    <p>
+      <p>
+        Games Played:
+        <span id="gamesPlayedStat">0</span>
+      </p>
+
+      <p>
+        Lifetime Clicks:
+        <span id="lifetimeClicksStat">0</span>
+      </p>
+
+      <p>
+        Lifetime Coins:
+        <span id="lifetimeCoinsStat">0</span>
+      </p>
+
+      <p>
+        Highest Level:
+        <span id="highestLevelStat">1</span>
+      </p>
+
+      <p>
+        High Score:
+        <span id="highScore">0</span>
+      </p>
+
+      <p>
+        Accuracy:
+        <span id="accuracy">0</span>%
+      </p>
+
+      <p>
+        Misses:
+        <span id="misses">0</span>
+      </p>
+
+      <button id="closeStats">Close</button>
+    </div>
+
+    <!-- Shop -->
+
+    <div id="shop" hidden>
+      <h2>🛒 Button Shop</h2>
+
+      <p>Spend your coins on new button skins.</p>
+
+      <div class="shopGrid">
+        <div class="shopItem">
+          <h3>🔵 Blue</h3>
+
+          <p>50 Coins</p>
+
+          <button id="blueSkin">Buy</button>
+        </div>
+
+        <div class="shopItem">
+          <h3>🟡 Gold</h3>
+
+          <p>100 Coins</p>
+
+          <button id="goldSkin">Buy</button>
+        </div>
+
+        <div class="shopItem">
+          <h3>🌈 Rainbow</h3>
+
+          <p>250 Coins</p>
+
+          <button id="rainbowSkin">Buy</button>
+        </div>
+
+        <div class="shopItem">
+          <h3>🌌 Space Theme</h3>
+
+          <p>Cost: 500 Coins</p>
+
+          <button id="spaceTheme">Buy</button>
+        </div>
+
+        <div class="shopItem">
+          <h3>🌊 Ocean Theme</h3>
+
+          <p>Cost: 750 Coins</p>
+
+          <button id="oceanTheme">Buy</button>
+        </div>
+
+        <div class="shopItem">
+          <h3>🔥 Lava Theme</h3>
+
+          <p>Cost: 1000 Coins</p>
+
+          <button id="lavaTheme">Buy</button>
+        </div>
+
+        <div class="shopItem">
+          <h3>🌲 Forest Theme</h3>
+
+          <p>Cost: 1250 Coins</p>
+
+          <button id="forestTheme">Buy</button>
+        </div>
+
+        <div class="shopItem">
+          <h3>🎨 Default Theme</h3>
+
+          <p>Free</p>
+
+          <button id="defaultTheme">Selected</button>
+        </div>
+      </div>
+
+      <button id="closeShop">Close Shop</button>
+    </div>
+
+    <!-- Game Over -->
+
+    <div id="gameOverScreen" hidden>
+      <h1>Game Over</h1>
+
+      <p>
         Score:
         <span id="finalScore"></span>
-    </p>
+      </p>
 
-    <p>
+      <p>
         Misses:
         <span id="finalMisses"></span>
-    </p>
+      </p>
 
-    <button onclick="location.reload()">
-        Play Again
-    </button>
+      <button onclick="location.reload()">Play Again</button>
+    </div>
 
-</div>
-
-<script src="script.js"></script>
-
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>

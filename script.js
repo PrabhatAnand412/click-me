@@ -6,98 +6,55 @@ const highScoreDisplay = document.getElementById("highScore");
 const timerDisplay = document.getElementById("timer");
 const message = document.getElementById("message");
 const fakeContainer = document.getElementById("fakeContainer");
-const mainMenu =
-    document.getElementById(
-        "mainMenu"
-    );
+const mainMenu = document.getElementById("mainMenu");
 
-const playBtn =
-    document.getElementById(
-        "playBtn"
-    );
+const playBtn = document.getElementById("playBtn");
 
-const menuStatsBtn =
-    document.getElementById(
-        "menuStatsBtn"
-    );
+const menuStatsBtn = document.getElementById("menuStatsBtn");
 
-const menuShopBtn =
-    document.getElementById(
-        "menuShopBtn"
-    );
+const menuShopBtn = document.getElementById("menuShopBtn");
 
-const layout =
-    document.getElementById(
-        "layout"
-    );
-const gameArena =
-    document.getElementById(
-        "gameArena"
-    );
-const difficultySelect =
-    document.getElementById(
-        "difficultySelect"
-    );
+const layout = document.getElementById("layout");
+const gameArena = document.getElementById("gameArena");
+const difficultySelect = document.getElementById("difficultySelect");
 
-const shopBtn =
-    document.getElementById("shopBtn");
+const shopBtn = document.getElementById("shopBtn");
 
-const shop =
-    document.getElementById("shop");
+const shop = document.getElementById("shop");
 
-const closeShop =
-    document.getElementById("closeShop");
+const closeShop = document.getElementById("closeShop");
 
-const statsBtn =
-    document.getElementById("statsBtn");
+const statsBtn = document.getElementById("statsBtn");
 
-const statsScreen =
-    document.getElementById("statsScreen");
+const statsScreen = document.getElementById("statsScreen");
 
-const closeStats =
-    document.getElementById("closeStats");
+const closeStats = document.getElementById("closeStats");
 
-const levelDisplay =
-    document.getElementById("level");
+const levelDisplay = document.getElementById("level");
 
-const coinsDisplay =
-    document.getElementById("coins");
+const coinsDisplay = document.getElementById("coins");
 
-const xpFill =
-    document.getElementById("xpFill");
+const xpFill = document.getElementById("xpFill");
 
-const powerupStatus =
-    document.getElementById(
-        "powerupStatus"
-    );
+const powerupStatus = document.getElementById("powerupStatus");
 
 let score = 0;
 let misses = 0;
 let totalAttempts = 0;
 let xp = 0;
-let level =
-    parseInt(
-        localStorage.getItem("level")
-    ) || 1;
+let level = parseInt(localStorage.getItem("level")) || 1;
 
-let coins =
-    parseInt(
-        localStorage.getItem("coins")
-    ) || 0;
+let coins = parseInt(localStorage.getItem("coins")) || 0;
 
 const xpNeeded = 100;
 let combo = 0;
 let comboTimer;
 let fakeButtonsCreated = false;
-const isTouchDevice =
-    "ontouchstart" in window ||
-    navigator.maxTouchPoints > 0;
+const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
-let dangerDistance =
-    isTouchDevice ? 20 : 35;
+let dangerDistance = isTouchDevice ? 20 : 35;
 
-let currentDifficulty =
-    "normal";
+let currentDifficulty = "normal";
 let xpReward = 20;
 let coinReward = 5;
 let doubleXP = false;
@@ -119,821 +76,534 @@ let freezeButtonTime = 0;
 let gameOver = false;
 let gamePaused = false;
 
-let highScore =
-    parseInt(localStorage.getItem("highScore")) || 0;
+let highScore = parseInt(localStorage.getItem("highScore")) || 0;
 
-let gamesPlayed =
-    parseInt(
-        localStorage.getItem(
-            "gamesPlayed"
-        )
-    ) || 0;
+let gamesPlayed = parseInt(localStorage.getItem("gamesPlayed")) || 0;
 
-let lifetimeClicks =
-    parseInt(
-        localStorage.getItem(
-            "lifetimeClicks"
-        )
-    ) || 0;
+let lifetimeClicks = parseInt(localStorage.getItem("lifetimeClicks")) || 0;
 
-let lifetimeCoins =
-    parseInt(
-        localStorage.getItem(
-            "lifetimeCoins"
-        )
-    ) || 0; 
-let ownedSkins =
-    JSON.parse(
-        localStorage.getItem(
-            "ownedSkins"
-        )
-    ) || ["default"];
+let lifetimeCoins = parseInt(localStorage.getItem("lifetimeCoins")) || 0;
+let ownedSkins = JSON.parse(localStorage.getItem("ownedSkins")) || ["default"];
 
-let selectedSkin =
-    localStorage.getItem(
-        "selectedSkin"
-    ) || "default";
-const savedSkin =
-    localStorage.getItem("skin");
+let selectedSkin = localStorage.getItem("selectedSkin") || "default";
+const savedSkin = localStorage.getItem("skin");
 
-let ownedThemes =
-    JSON.parse(
-        localStorage.getItem(
-            "ownedThemes"
-        )
-    ) || ["default"];
+let ownedThemes = JSON.parse(localStorage.getItem("ownedThemes")) || [
+  "default",
+];
 
-let selectedTheme =
-    localStorage.getItem(
-        "selectedTheme"
-    ) || "default";
+let selectedTheme = localStorage.getItem("selectedTheme") || "default";
 
 highScoreDisplay.textContent = highScore;
 levelDisplay.textContent = level;
 coinsDisplay.textContent = coins;
-if(savedSkin){
-
-    if(savedSkin.includes("linear-gradient")){
-
-        button.style.backgroundImage =
-            savedSkin;
-
-    } else {
-
-        button.style.background =
-            savedSkin;
-    }
+if (savedSkin) {
+  if (savedSkin.includes("linear-gradient")) {
+    button.style.backgroundImage = savedSkin;
+  } else {
+    button.style.background = savedSkin;
+  }
 }
 
 const achievements = [];
 
 const taunts = [
-    "Too slow!",
-    "Nice try!",
-    "You'll never catch me!",
-    "Skill issue.",
-    "Almost!",
-    "Keep trying!",
-    "Was that your best?",
-    "Not even close!",
-    "😂",
-    "Come on..."
+  "Too slow!",
+  "Nice try!",
+  "You'll never catch me!",
+  "Skill issue.",
+  "Almost!",
+  "Keep trying!",
+  "Was that your best?",
+  "Not even close!",
+  "😂",
+  "Come on...",
 ];
 
 function randomTaunt() {
+  const index = Math.floor(Math.random() * taunts.length);
 
-    const index =
-        Math.floor(Math.random() * taunts.length);
-
-    message.textContent = taunts[index];
+  message.textContent = taunts[index];
 }
 
 function applyDifficulty() {
+  currentDifficulty = difficultySelect.value;
 
-    currentDifficulty =
-        difficultySelect.value;
-
-    switch(currentDifficulty){
-
+  switch (currentDifficulty) {
     case "easy":
+      dangerDistance = 20;
 
-        dangerDistance = 20;
+      xpReward = 15;
 
-        xpReward = 15;
+      coinReward = 3;
 
-        coinReward = 3;
-
-        break;
+      break;
 
     case "normal":
+      dangerDistance = 35;
 
-        dangerDistance = 35;
+      xpReward = 20;
 
-        xpReward = 20;
+      coinReward = 5;
 
-        coinReward = 5;
-
-        break;
+      break;
 
     case "hard":
+      dangerDistance = 60;
 
-        dangerDistance = 60;
+      xpReward = 30;
 
-        xpReward = 30;
+      coinReward = 8;
 
-        coinReward = 8;
-
-        break;
+      break;
 
     case "nightmare":
+      dangerDistance = 100;
 
-        dangerDistance = 100;
+      xpReward = 50;
 
-        xpReward = 50;
+      coinReward = 15;
 
-        coinReward = 15;
+      break;
+  }
 
-        break;
-}
-
-    message.textContent =
-        `Difficulty: ${currentDifficulty}`;
+  message.textContent = `Difficulty: ${currentDifficulty}`;
 }
 
 function unlockAchievement(name) {
+  if (achievements.includes(name)) return;
 
-    if (achievements.includes(name))
-        return;
+  achievements.push(name);
 
-    achievements.push(name);
+  const popup = document.getElementById("achievementPopup");
 
-    const popup =
-        document.getElementById(
-            "achievementPopup"
-        );
+  document.getElementById("achievementText").textContent = name;
 
-    document.getElementById(
-        "achievementText"
-    ).textContent = name;
+  popup.classList.add("show");
 
-    popup.classList.add("show");
-
-    setTimeout(() => {
-
-        popup.classList.remove("show");
-
-    }, 3000);
+  setTimeout(() => {
+    popup.classList.remove("show");
+  }, 3000);
 }
 
 function updateAccuracy() {
+  const accuracy =
+    totalAttempts > 0 ? Math.round((score / totalAttempts) * 100) : 0;
 
-    const accuracy =
-        totalAttempts > 0
-            ? Math.round((score / totalAttempts) * 100)
-            : 0;
-
-    accuracyDisplay.textContent = accuracy;
+  accuracyDisplay.textContent = accuracy;
 }
 
 function addXP(amount) {
+  xp += amount;
 
-    xp += amount;
+  if (xp > xpNeeded) xp = xpNeeded;
 
-    if (xp > xpNeeded)
-        xp = xpNeeded;
+  xpFill.style.width = (xp / xpNeeded) * 100 + "%";
 
-    xpFill.style.width =
-        (xp / xpNeeded) * 100 + "%";
+  if (xp >= xpNeeded) {
+    xp = 0;
 
-    if (xp >= xpNeeded) {
+    level++;
 
-        xp = 0;
+    levelDisplay.textContent = level;
 
-        level++;
+    localStorage.setItem("level", level);
 
-        levelDisplay.textContent =
-    level;
+    coins += 50;
 
-localStorage.setItem(
-    "level",
-    level
-);
+    lifetimeCoins += 50;
 
-coins += 50;
+    coinsDisplay.textContent = coins;
 
-lifetimeCoins += 50;
+    localStorage.setItem("coins", coins);
 
-coinsDisplay.textContent =
-    coins;
+    localStorage.setItem("lifetimeCoins", lifetimeCoins);
 
-localStorage.setItem(
-    "coins",
-    coins
-);
+    xpFill.style.width = "0%";
 
-localStorage.setItem(
-    "lifetimeCoins",
-    lifetimeCoins
-);
+    unlockAchievement(`Level ${level} Reached`);
 
-        xpFill.style.width = "0%";
-
-        unlockAchievement(
-            `Level ${level} Reached`
-        );
-
-        message.textContent =
-            `⭐ Level ${level}!`;
-    }
+    message.textContent = `⭐ Level ${level}!`;
+  }
 }
 
-function createFloatingText(
-    text,
-    offset = 0
-) {
+function createFloatingText(text, offset = 0) {
+  const popup = document.createElement("div");
 
-    const popup =
-        document.createElement("div");
+  popup.className = "floatingText";
 
-    popup.className =
-        "floatingText";
+  if (text.includes("Coins")) {
+    popup.style.color = "#facc15";
+  }
 
-    if(text.includes("Coins")){
+  popup.textContent = text;
 
-    popup.style.color =
-        "#facc15";
-}
+  const rect = button.getBoundingClientRect();
 
-    popup.textContent = text;
+  popup.style.left = rect.left + rect.width / 2 + "px";
 
-    const rect =
-        button.getBoundingClientRect();
+  popup.style.top = rect.top + offset + "px";
 
-    popup.style.left =
-        rect.left + rect.width / 2 + "px";
+  document.body.appendChild(popup);
 
-    popup.style.top =
-    rect.top + offset + "px";
-
-    document.body.appendChild(
-        popup
-    );
-
-    setTimeout(() => {
-
-        popup.remove();
-
-    }, 800);
+  setTimeout(() => {
+    popup.remove();
+  }, 800);
 }
 
 function teleportButton() {
+  const rect = button.getBoundingClientRect();
 
-    const rect = button.getBoundingClientRect();
+  const arenaRect = gameArena.getBoundingClientRect();
 
-    const arenaRect =
-    gameArena.getBoundingClientRect();
+  const maxX = arenaRect.width - rect.width;
 
-const maxX =
-    arenaRect.width - rect.width;
+  const maxY = arenaRect.height - rect.height;
 
-const maxY =
-    arenaRect.height - rect.height;
+  button.style.left = Math.random() * maxX + "px";
 
-    button.style.left =
-        Math.random() * maxX + "px";
+  button.style.top = Math.random() * maxY + "px";
 
-    button.style.top =
-        Math.random() * maxY + "px";
-
-    randomTaunt();
+  randomTaunt();
 }
 
 function createFakeButtons() {
+  if (fakeButtonsCreated) return;
 
-    if (fakeButtonsCreated) return;
+  fakeButtonsCreated = true;
 
-    fakeButtonsCreated = true;
+  for (let i = 0; i < 3; i++) {
+    const fake = document.createElement("button");
 
-    for (let i = 0; i < 3; i++) {
+    fake.innerText = "Click Me!";
+    fake.className = "fakeButton";
 
-        const fake =
-            document.createElement("button");
+    const arenaRect = gameArena.getBoundingClientRect();
 
-        fake.innerText = "Click Me!";
-        fake.className = "fakeButton";
+    fake.style.left = Math.random() * (arenaRect.width - 150) + "px";
 
-        const arenaRect =
-    gameArena.getBoundingClientRect();
+    fake.style.top = Math.random() * (arenaRect.height - 150) + "px";
 
-fake.style.left =
-    Math.random() *
-    (arenaRect.width - 150) + "px";
+    fake.addEventListener("click", () => {
+      message.textContent = "Wrong button 😂";
+    });
 
-fake.style.top =
-    Math.random() *
-    (arenaRect.height - 150) + "px";
-
-        fake.addEventListener("click", () => {
-
-            message.textContent =
-                "Wrong button 😂";
-
-        });
-
-        fakeContainer.appendChild(fake);
-    }
+    fakeContainer.appendChild(fake);
+  }
 }
 
 function showPowerup(type) {
+  const powerup = document.createElement("div");
 
-    const powerup =
-        document.createElement("div");
+  powerup.className = "powerup";
 
-    powerup.className =
-        "powerup";
+  const arenaRect = gameArena.getBoundingClientRect();
 
-    const arenaRect =
-        gameArena.getBoundingClientRect();
+  powerup.style.left = Math.random() * (arenaRect.width - 60) + "px";
 
-    powerup.style.left =
-        Math.random() *
-        (arenaRect.width - 60) + "px";
+  powerup.style.top = Math.random() * (arenaRect.height - 60) + "px";
 
-    powerup.style.top =
-        Math.random() *
-        (arenaRect.height - 60) + "px";
+  if (type === "xp") powerup.textContent = "⭐";
 
-    if(type === "xp")
-        powerup.textContent = "⭐";
+  if (type === "coins") powerup.textContent = "🪙";
 
-    if(type === "coins")
-        powerup.textContent = "🪙";
+  if (type === "slow") powerup.textContent = "⚡";
 
-    if(type === "slow")
-        powerup.textContent = "⚡";
+  if (type === "freeze") powerup.textContent = "🧊";
 
-    if(type === "freeze")
-        powerup.textContent = "🧊";
+  powerup.addEventListener("click", () => {
+    activatePowerup(type);
 
-    powerup.addEventListener(
-        "click",
-        () => {
+    powerup.remove();
+  });
 
-            activatePowerup(type);
+  gameArena.appendChild(powerup);
 
-            powerup.remove();
-        }
-    );
-
-    gameArena.appendChild(powerup);
-
-    setTimeout(() => {
-
-        powerup.remove();
-
-    }, 8000);
+  setTimeout(() => {
+    powerup.remove();
+  }, 8000);
 }
 
-function activatePowerup(type){
-
-    if(type === "xp"){
-
+function activatePowerup(type) {
+  if (type === "xp") {
     doubleXP = true;
     doubleXPTime = 10;
 
     updatePowerupStatus();
 
-    message.textContent =
-        "⭐ Double XP";
+    message.textContent = "⭐ Double XP";
 
     setTimeout(() => {
+      doubleXP = false;
 
-        doubleXP = false;
-
-        updatePowerupStatus();
-
+      updatePowerupStatus();
     }, 10000);
-}
+  }
 
-    if(type === "coins"){
-
+  if (type === "coins") {
     doubleCoins = true;
     doubleCoinsTime = 10;
 
     updatePowerupStatus();
 
-    message.textContent =
-        "🪙 Double Coins";
+    message.textContent = "🪙 Double Coins";
 
     setTimeout(() => {
+      doubleCoins = false;
 
-        doubleCoins = false;
-
-        updatePowerupStatus();
-
+      updatePowerupStatus();
     }, 10000);
-}
+  }
 
-    if(type === "slow"){
-
+  if (type === "slow") {
     slowButton = true;
     slowButtonTime = 10;
 
     updatePowerupStatus();
 
-    message.textContent =
-        "⚡ Slow Button";
+    message.textContent = "⚡ Slow Button";
 
     setTimeout(() => {
+      slowButton = false;
 
-        slowButton = false;
-
-        updatePowerupStatus();
-
+      updatePowerupStatus();
     }, 10000);
-}
+  }
 
-if(type === "freeze"){
-
+  if (type === "freeze") {
     freezeButton = true;
 
     freezeButtonTime = 5;
 
     updatePowerupStatus();
 
-    message.textContent =
-        "🧊 Freeze Button";
+    message.textContent = "🧊 Freeze Button";
 
     setTimeout(() => {
+      freezeButton = false;
 
-        freezeButton = false;
-
-        updatePowerupStatus();
-
+      updatePowerupStatus();
     }, 5000);
-}
-
+  }
 }
 
 function updatePowerupStatus() {
+  const active = [];
 
-    const active = [];
+  if (doubleXP) active.push(`⭐ XP (${doubleXPTime}s)`);
 
-    if(doubleXP)
-        active.push(
-            `⭐ XP (${doubleXPTime}s)`
-        );
+  if (doubleCoins) active.push(`🪙 Coins (${doubleCoinsTime}s)`);
 
-    if(doubleCoins)
-        active.push(
-            `🪙 Coins (${doubleCoinsTime}s)`
-        );
+  if (slowButton) active.push(`⚡ Slow (${slowButtonTime}s)`);
 
-    if(slowButton)
-        active.push(
-            `⚡ Slow (${slowButtonTime}s)`
-        );
-        
-        if(freezeButton)
-    active.push(
-        `🧊 Freeze (${freezeButtonTime}s)`
-    );
+  if (freezeButton) active.push(`🧊 Freeze (${freezeButtonTime}s)`);
 
-    powerupStatus.textContent =
-        active.length
-            ? active.join(" | ")
-            : "No Active Powerups";
+  powerupStatus.textContent = active.length
+    ? active.join(" | ")
+    : "No Active Powerups";
 }
 
 document.addEventListener("mousemove", (e) => {
+  if (isTouchDevice) return;
 
-    if(isTouchDevice) return;
+  if (gameOver) return;
 
-    if (gameOver) return;
+  if (freezeButton) return;
 
-    if(freezeButton)
-    return;
+  const rect = button.getBoundingClientRect();
 
-    const rect =
-        button.getBoundingClientRect();
+  const buttonX = rect.left + rect.width / 2;
 
-    const buttonX =
-        rect.left + rect.width / 2;
+  const buttonY = rect.top + rect.height / 2;
 
-    const buttonY =
-        rect.top + rect.height / 2;
+  const dx = e.clientX - buttonX;
 
-    const dx =
-        e.clientX - buttonX;
+  const dy = e.clientY - buttonY;
 
-    const dy =
-        e.clientY - buttonY;
+  const distance = Math.sqrt(dx * dx + dy * dy);
 
-    const distance =
-        Math.sqrt(dx * dx + dy * dy);
+  if (distance < dangerDistance) {
+    const escapeDistance = slowButton ? 75 : 150;
 
-    if (distance < dangerDistance) {
+    let newX = button.offsetLeft - (dx / distance) * escapeDistance;
 
-        const escapeDistance =
-    slowButton
-        ? 75
-        : 150;
+    let newY = button.offsetTop - (dy / distance) * escapeDistance;
 
-        let newX =
-            button.offsetLeft -
-            (dx / distance) *
-            escapeDistance;
+    const arenaRect = gameArena.getBoundingClientRect();
 
-        let newY =
-            button.offsetTop -
-            (dy / distance) *
-            escapeDistance;
+    newX = Math.max(0, Math.min(newX, arenaRect.width - rect.width));
 
-        const arenaRect =
-    gameArena.getBoundingClientRect();
+    newY = Math.max(0, Math.min(newY, arenaRect.height - rect.height));
 
-newX = Math.max(
-    0,
-    Math.min(
-        newX,
-        arenaRect.width - rect.width
-    )
-);
+    button.style.left = newX + "px";
+    button.style.top = newY + "px";
 
-newY = Math.max(
-    0,
-    Math.min(
-        newY,
-        arenaRect.height - rect.height
-    )
-);
-
-        button.style.left = newX + "px";
-        button.style.top = newY + "px";
-
-        randomTaunt();
-    }
+    randomTaunt();
+  }
 });
 
 button.addEventListener("touchstart", (e) => {
+  e.preventDefault();
 
-    e.preventDefault();
+  if (gameOver) return;
 
-    if(gameOver)
-        return;
+  score++;
+  lifetimeClicks++;
 
-    score++;
-    lifetimeClicks++;
+  localStorage.setItem("lifetimeClicks", lifetimeClicks);
+  totalAttempts++;
 
-localStorage.setItem(
-    "lifetimeClicks",
-    lifetimeClicks
-);
-    totalAttempts++;
+  scoreDisplay.textContent = score;
 
-    scoreDisplay.textContent = score;
+  addXP(doubleXP ? xpReward * 2 : xpReward);
 
-    addXP(
-    doubleXP
-        ? xpReward * 2
-        : xpReward
-);
+  coins += doubleCoins ? coinReward * 2 : coinReward;
 
-coins +=
-    doubleCoins
-        ? coinReward * 2
-        : coinReward;
+  lifetimeCoins += doubleCoins ? coinReward * 2 : coinReward;
 
-lifetimeCoins +=
-    doubleCoins
-        ? coinReward * 2
-        : coinReward;
+  localStorage.setItem("lifetimeCoins", lifetimeCoins);
 
-localStorage.setItem(
-    "lifetimeCoins",
-    lifetimeCoins
-);
+  coinsDisplay.textContent = coins;
 
-coinsDisplay.textContent =
-    coins;
+  localStorage.setItem("coins", coins);
 
-localStorage.setItem(
-    "coins",
-    coins
-);
+  createFloatingText(
+    `+${doubleXP ? xpReward * 2 : xpReward} XP | +${
+      doubleCoins ? coinReward * 2 : coinReward
+    } Coins`,
+  );
 
-createFloatingText(
-    `+${
-        doubleXP
-            ? xpReward * 2
-            : xpReward
-    } XP | +${
-        doubleCoins
-            ? coinReward * 2
-            : coinReward
-    } Coins`
-);
+  updateAccuracy();
 
-    updateAccuracy();
+  message.textContent = `You got me! Score: ${score}`;
 
-    message.textContent =
-        `You got me! Score: ${score}`;
+  if (score > highScore) {
+    highScore = score;
 
-    if(score > highScore){
+    localStorage.setItem("highScore", highScore);
 
-        highScore = score;
+    highScoreDisplay.textContent = highScore;
+  }
 
-        localStorage.setItem(
-            "highScore",
-            highScore
-        );
-
-        highScoreDisplay.textContent =
-            highScore;
-    }
-
-    setTimeout(() => {
-
-    if(!gameOver)
-        teleportButton();
-
-}, slowButton ? 300 : 120);
+  setTimeout(
+    () => {
+      if (!gameOver) teleportButton();
+    },
+    slowButton ? 300 : 120,
+  );
 });
 
 document.addEventListener("click", (e) => {
+  if (gameOver) return;
 
-    if (gameOver) return;
+  if (e.target !== button) {
+    misses++;
+    totalAttempts++;
 
-    if (e.target !== button) {
+    missesDisplay.textContent = misses;
 
-        misses++;
-        totalAttempts++;
-
-        missesDisplay.textContent = misses;
-
-        updateAccuracy();
-    }
+    updateAccuracy();
+  }
 });
 
 button.addEventListener("click", () => {
+  if (gameOver) return;
 
-    if (gameOver) return;
+  combo++;
 
-    combo++;
+  clearTimeout(comboTimer);
 
-clearTimeout(comboTimer);
-
-comboTimer = setTimeout(() => {
-
+  comboTimer = setTimeout(() => {
     combo = 0;
+  }, 3000);
 
-}, 3000);
+  score += combo;
 
-score += combo;
+  lifetimeClicks++;
 
-lifetimeClicks++;
+  localStorage.setItem("lifetimeClicks", lifetimeClicks);
 
-localStorage.setItem(
-    "lifetimeClicks",
-    lifetimeClicks
-);
+  totalAttempts++;
 
-    totalAttempts++;
+  scoreDisplay.textContent = score;
 
-    scoreDisplay.textContent = score;
+  addXP(doubleXP ? xpReward * 2 : xpReward);
 
-addXP(
-    doubleXP
-        ? xpReward * 2
-        : xpReward
-);
+  coins += doubleCoins ? coinReward * 2 : coinReward;
 
-coins +=
-    doubleCoins
-        ? coinReward * 2
-        : coinReward;
+  lifetimeCoins += doubleCoins ? coinReward * 2 : coinReward;
 
-lifetimeCoins +=
-    doubleCoins
-        ? coinReward * 2
-        : coinReward;
+  localStorage.setItem("lifetimeCoins", lifetimeCoins);
 
-localStorage.setItem(
-    "lifetimeCoins",
-    lifetimeCoins
-);
+  createFloatingText(
+    `+${doubleXP ? xpReward * 2 : xpReward} XP | +${
+      doubleCoins ? coinReward * 2 : coinReward
+    } Coins`,
+  );
 
-createFloatingText(
-    `+${
-        doubleXP
-            ? xpReward * 2
-            : xpReward
-    } XP | +${
-        doubleCoins
-            ? coinReward * 2
-            : coinReward
-    } Coins`
-);
+  coinsDisplay.textContent = coins;
 
-coinsDisplay.textContent =
-    coins;
+  localStorage.setItem("coins", coins);
 
-    localStorage.setItem(
-    "coins",
-    coins
-);
+  updateAccuracy();
 
-    updateAccuracy();
+  message.textContent = `🔥 Combo x${combo} | Score: ${score}`;
 
-    message.textContent =
-    `🔥 Combo x${combo} | Score: ${score}`;
+  if (score > highScore) {
+    highScore = score;
 
-    if (score > highScore) {
+    localStorage.setItem("highScore", highScore);
 
-        highScore = score;
+    highScoreDisplay.textContent = highScore;
+  }
 
-        localStorage.setItem(
-            "highScore",
-            highScore
-        );
+  if (score === 1) unlockAchievement("First Catch");
 
-        highScoreDisplay.textContent =
-            highScore;
-    }
+  if (score === 5) unlockAchievement("Button Hunter");
 
-    if (score === 1)
-        unlockAchievement("First Catch");
+  if (score === 10) unlockAchievement("Persistence Pays Off");
 
-    if (score === 5)
-        unlockAchievement("Button Hunter");
+  if (score === 25) unlockAchievement("Professional Annoyer");
 
-    if (score === 10)
-        unlockAchievement("Persistence Pays Off");
+  if (score === 3) {
+    message.textContent = "Level 2 Unlocked!";
+  }
 
-    if (score === 25)
-        unlockAchievement("Professional Annoyer");
-
-    if (score === 3) {
-
-    message.textContent =
-        "Level 2 Unlocked!";
-}
-
-if (score === 6) {
-
+  if (score === 6) {
     button.style.scale = "0.9";
 
-    message.textContent =
-        "Level 3!";
-}
+    message.textContent = "Level 3!";
+  }
 
-if (score === 10) {
-
+  if (score === 10) {
     createFakeButtons();
 
-    message.textContent =
-        "Fake buttons unlocked!";
-}
+    message.textContent = "Fake buttons unlocked!";
+  }
 
-    if (score >= 20) {
+  if (score >= 20) {
+    button.style.animation = "spin 1s linear infinite";
 
-        button.style.animation =
-            "spin 1s linear infinite";
+    button.style.scale = "0.8";
+  }
 
-        button.style.scale = "0.8";
-    }
-
-    setTimeout(() => {
-
-        if (!gameOver)
-            teleportButton();
-
-    }, 200);
+  setTimeout(() => {
+    if (!gameOver) teleportButton();
+  }, 200);
 });
 
 function showGameOver() {
+  const screen = document.getElementById("gameOverScreen");
 
-    const screen =
-        document.getElementById(
-            "gameOverScreen"
-        );
+  gamesPlayed++;
 
-    gamesPlayed++;
+  localStorage.setItem("gamesPlayed", gamesPlayed);
 
-localStorage.setItem(
-    "gamesPlayed",
-    gamesPlayed
-);
+  screen.removeAttribute("hidden");
 
-    screen.removeAttribute("hidden");
+  document.getElementById("finalScore").textContent = score;
 
-    document.getElementById(
-        "finalScore"
-    ).textContent = score;
-
-    document.getElementById(
-        "finalMisses"
-    ).textContent = misses;
+  document.getElementById("finalMisses").textContent = misses;
 }
 
 let timeLeft = 60;
@@ -943,898 +613,497 @@ let timerStarted = false;
 let timer;
 
 function startTimer() {
+  if (timerStarted) return;
 
-    if(timerStarted)
-        return;
+  timerStarted = true;
 
-    timerStarted = true;
+  timer = setInterval(() => {
+    if (gameOver || gamePaused) return;
 
-    timer = setInterval(() => {
+    timeLeft--;
 
-        if(gameOver || gamePaused)
-            return;
+    timerDisplay.textContent = timeLeft;
 
-        timeLeft--;
+    if (timeLeft <= 0) {
+      gameOver = true;
 
-        timerDisplay.textContent =
-            timeLeft;
+      clearInterval(timer);
 
-        if(timeLeft <= 0){
+      showGameOver();
 
-            gameOver = true;
-
-            clearInterval(timer);
-
-            showGameOver();
-
-            message.textContent =
-                "Game Over!";
-        }
-
-    }, 1000);
+      message.textContent = "Game Over!";
+    }
+  }, 1000);
 }
 
 window.addEventListener("load", () => {
+  applyDifficulty();
+  updatePowerupStatus();
+  updateShopUI();
+  applyTheme(selectedTheme);
+  updateThemeUI();
 
-applyDifficulty();
-updatePowerupStatus();
-updateShopUI();
-applyTheme(
-    selectedTheme
-);
-updateThemeUI();
+  timerDisplay.textContent = timeLeft;
 
-timerDisplay.textContent =
-    timeLeft;
+  const rect = button.getBoundingClientRect();
 
-    const rect =
-        button.getBoundingClientRect();
+  const arenaRect = gameArena.getBoundingClientRect();
 
-    const arenaRect =
-    gameArena.getBoundingClientRect();
+  button.style.left = (arenaRect.width - rect.width) / 2 + "px";
 
-button.style.left =
-    (arenaRect.width - rect.width) / 2 + "px";
-
-button.style.top =
-    (arenaRect.height - rect.height) / 2 + "px";
+  button.style.top = (arenaRect.height - rect.height) / 2 + "px";
 });
 
 window.addEventListener("resize", () => {
+  const rect = button.getBoundingClientRect();
 
-    const rect =
-        button.getBoundingClientRect();
+  const arenaRect = gameArena.getBoundingClientRect();
 
-    const arenaRect =
-        gameArena.getBoundingClientRect();
+  button.style.left =
+    Math.min(button.offsetLeft, arenaRect.width - rect.width) + "px";
 
-    button.style.left =
-        Math.min(
-            button.offsetLeft,
-            arenaRect.width - rect.width
-        ) + "px";
-
-    button.style.top =
-        Math.min(
-            button.offsetTop,
-            arenaRect.height - rect.height
-        ) + "px";
+  button.style.top =
+    Math.min(button.offsetTop, arenaRect.height - rect.height) + "px";
 });
 
-document.addEventListener(
-    "visibilitychange",
-    () => {
+document.addEventListener("visibilitychange", () => {
+  gamePaused = document.hidden;
 
-        gamePaused = document.hidden;
+  if (gamePaused) {
+    message.textContent = "⏸ Game Paused";
+  }
+});
 
-        if(gamePaused){
+const blueSkinBtn = document.getElementById("blueSkin");
 
-            message.textContent =
-                "⏸ Game Paused";
-        }
-    }
-);
+const goldSkinBtn = document.getElementById("goldSkin");
 
-const blueSkinBtn =
-    document.getElementById(
-        "blueSkin"
-    );
+const rainbowSkinBtn = document.getElementById("rainbowSkin");
 
-const goldSkinBtn =
-    document.getElementById(
-        "goldSkin"
-    );
+const spaceThemeBtn = document.getElementById("spaceTheme");
 
-const rainbowSkinBtn =
-    document.getElementById(
-        "rainbowSkin"
-    );
+const oceanThemeBtn = document.getElementById("oceanTheme");
 
-const spaceThemeBtn =
-    document.getElementById(
-        "spaceTheme"
-    );
+const lavaThemeBtn = document.getElementById("lavaTheme");
 
-const oceanThemeBtn =
-    document.getElementById(
-        "oceanTheme"
-    );
+const forestThemeBtn = document.getElementById("forestTheme");
 
-const lavaThemeBtn =
-    document.getElementById(
-        "lavaTheme"
-    );
-
-const forestThemeBtn =
-    document.getElementById(
-        "forestTheme"
-    );
-
-const defaultThemeBtn =
-    document.getElementById(
-        "defaultTheme"
-    );
+const defaultThemeBtn = document.getElementById("defaultTheme");
 
 function updateShopUI() {
+  blueSkinBtn.textContent = ownedSkins.includes("blue")
+    ? selectedSkin === "blue"
+      ? "Selected"
+      : "Owned"
+    : "Buy";
 
-    blueSkinBtn.textContent =
-        ownedSkins.includes("blue")
-        ? (
-            selectedSkin === "blue"
-            ? "Selected"
-            : "Owned"
-        )
-        : "Buy";
+  goldSkinBtn.textContent = ownedSkins.includes("gold")
+    ? selectedSkin === "gold"
+      ? "Selected"
+      : "Owned"
+    : "Buy";
 
-    goldSkinBtn.textContent =
-        ownedSkins.includes("gold")
-        ? (
-            selectedSkin === "gold"
-            ? "Selected"
-            : "Owned"
-        )
-        : "Buy";
-
-    rainbowSkinBtn.textContent =
-        ownedSkins.includes("rainbow")
-        ? (
-            selectedSkin === "rainbow"
-            ? "Selected"
-            : "Owned"
-        )
-        : "Buy";
+  rainbowSkinBtn.textContent = ownedSkins.includes("rainbow")
+    ? selectedSkin === "rainbow"
+      ? "Selected"
+      : "Owned"
+    : "Buy";
 }
 
 function updateThemeUI() {
+  spaceThemeBtn.textContent = ownedThemes.includes("space")
+    ? selectedTheme === "space"
+      ? "Selected"
+      : "Owned"
+    : "Buy";
 
-    spaceThemeBtn.textContent =
-        ownedThemes.includes("space")
-        ? (
-            selectedTheme === "space"
-            ? "Selected"
-            : "Owned"
-        )
-        : "Buy";
+  oceanThemeBtn.textContent = ownedThemes.includes("ocean")
+    ? selectedTheme === "ocean"
+      ? "Selected"
+      : "Owned"
+    : "Buy";
 
-    oceanThemeBtn.textContent =
-        ownedThemes.includes("ocean")
-        ? (
-            selectedTheme === "ocean"
-            ? "Selected"
-            : "Owned"
-        )
-        : "Buy";
+  lavaThemeBtn.textContent = ownedThemes.includes("lava")
+    ? selectedTheme === "lava"
+      ? "Selected"
+      : "Owned"
+    : "Buy";
 
-    lavaThemeBtn.textContent =
-        ownedThemes.includes("lava")
-        ? (
-            selectedTheme === "lava"
-            ? "Selected"
-            : "Owned"
-        )
-        : "Buy";
+  forestThemeBtn.textContent = ownedThemes.includes("forest")
+    ? selectedTheme === "forest"
+      ? "Selected"
+      : "Owned"
+    : "Buy";
 
-    forestThemeBtn.textContent =
-        ownedThemes.includes("forest")
-        ? (
-            selectedTheme === "forest"
-            ? "Selected"
-            : "Owned"
-        )
-        : "Buy";
-
-    defaultThemeBtn.textContent =
-    selectedTheme === "default"
-    ? "Selected"
-    : "Owned";
+  defaultThemeBtn.textContent =
+    selectedTheme === "default" ? "Selected" : "Owned";
 }
 
 shopBtn.addEventListener("click", () => {
-
-    shop.hidden = false;
+  shop.hidden = false;
 });
 
 closeShop.addEventListener("click", () => {
+  shop.hidden = true;
 
-    shop.hidden = true;
-
-    if(layout.hidden){
-
-        mainMenu.hidden = false;
-    }
+  if (layout.hidden) {
+    mainMenu.hidden = false;
+  }
 });
 
-blueSkinBtn.addEventListener(
-    "click",
-    () => {
+blueSkinBtn.addEventListener("click", () => {
+  if (ownedSkins.includes("blue")) {
+    selectedSkin = "blue";
 
-        if(
-            ownedSkins.includes(
-                "blue"
-            )
-        ){
+    button.style.background = "#3b82f6";
+  } else {
+    if (coins < 50) return;
 
-            selectedSkin =
-                "blue";
+    coins -= 50;
 
-            button.style.background =
-                "#3b82f6";
+    ownedSkins.push("blue");
 
-        } else {
+    selectedSkin = "blue";
 
-            if(coins < 50)
-                return;
+    button.style.background = "#3b82f6";
+  }
 
-            coins -= 50;
+  coinsDisplay.textContent = coins;
 
-            ownedSkins.push(
-                "blue"
-            );
+  localStorage.setItem("coins", coins);
 
-            selectedSkin =
-                "blue";
+  localStorage.setItem("selectedSkin", selectedSkin);
 
-            button.style.background =
-                "#3b82f6";
-        }
+  localStorage.setItem("ownedSkins", JSON.stringify(ownedSkins));
 
-        coinsDisplay.textContent =
-            coins;
+  localStorage.setItem("skin", "#3b82f6");
 
-        localStorage.setItem(
-            "coins",
-            coins
-        );
+  updateShopUI();
+});
 
-        localStorage.setItem(
-            "selectedSkin",
-            selectedSkin
-        );
+goldSkinBtn.addEventListener("click", () => {
+  if (ownedSkins.includes("gold")) {
+    selectedSkin = "gold";
 
-        localStorage.setItem(
-            "ownedSkins",
-            JSON.stringify(
-                ownedSkins
-            )
-        );
+    button.style.background = "gold";
+  } else {
+    if (coins < 100) return;
 
-        localStorage.setItem(
+    coins -= 100;
+
+    ownedSkins.push("gold");
+
+    selectedSkin = "gold";
+
+    button.style.background = "gold";
+  }
+
+  coinsDisplay.textContent = coins;
+
+  localStorage.setItem("coins", coins);
+
+  localStorage.setItem("selectedSkin", selectedSkin);
+
+  localStorage.setItem("ownedSkins", JSON.stringify(ownedSkins));
+
+  localStorage.setItem("skin", "gold");
+
+  updateShopUI();
+});
+rainbowSkinBtn.addEventListener("click", () => {
+  if (ownedSkins.includes("rainbow")) {
+    selectedSkin = "rainbow";
+
+    button.style.backgroundImage =
+      "linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet)";
+  } else {
+    if (coins < 250) return;
+
+    coins -= 250;
+
+    ownedSkins.push("rainbow");
+
+    selectedSkin = "rainbow";
+
+    button.style.backgroundImage =
+      "linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet)";
+  }
+
+  coinsDisplay.textContent = coins;
+
+  localStorage.setItem("coins", coins);
+
+  localStorage.setItem("selectedSkin", selectedSkin);
+
+  localStorage.setItem("ownedSkins", JSON.stringify(ownedSkins));
+
+  localStorage.setItem(
     "skin",
-    "#3b82f6"
-);
+    "linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet)",
+  );
 
-        updateShopUI();
-    }
-);
-
-goldSkinBtn.addEventListener(
-    "click",
-    () => {
-
-        if(
-            ownedSkins.includes(
-                "gold"
-            )
-        ){
-
-            selectedSkin =
-                "gold";
-
-            button.style.background =
-                "gold";
-
-        } else {
-
-            if(coins < 100)
-                return;
-
-            coins -= 100;
-
-            ownedSkins.push(
-                "gold"
-            );
-
-            selectedSkin =
-                "gold";
-
-            button.style.background =
-                "gold";
-        }
-
-        coinsDisplay.textContent =
-            coins;
-
-        localStorage.setItem(
-            "coins",
-            coins
-        );
-
-        localStorage.setItem(
-            "selectedSkin",
-            selectedSkin
-        );
-
-        localStorage.setItem(
-            "ownedSkins",
-            JSON.stringify(
-                ownedSkins
-            )
-        );
-
-        localStorage.setItem(
-            "skin",
-            "gold"
-        );
-
-        updateShopUI();
-    }
-);
-rainbowSkinBtn.addEventListener(
-    "click",
-    () => {
-
-        if(
-            ownedSkins.includes(
-                "rainbow"
-            )
-        ){
-
-            selectedSkin =
-                "rainbow";
-
-            button.style.backgroundImage =
-                "linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet)";
-
-        } else {
-
-            if(coins < 250)
-                return;
-
-            coins -= 250;
-
-            ownedSkins.push(
-                "rainbow"
-            );
-
-            selectedSkin =
-                "rainbow";
-
-            button.style.backgroundImage =
-                "linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet)";
-        }
-
-        coinsDisplay.textContent =
-            coins;
-
-        localStorage.setItem(
-            "coins",
-            coins
-        );
-
-        localStorage.setItem(
-            "selectedSkin",
-            selectedSkin
-        );
-
-        localStorage.setItem(
-            "ownedSkins",
-            JSON.stringify(
-                ownedSkins
-            )
-        );
-
-        localStorage.setItem(
-            "skin",
-            "linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet)"
-        );
-
-        updateShopUI();
-    }
-);
+  updateShopUI();
+});
 
 statsBtn.addEventListener("click", () => {
+  document.getElementById("gamesPlayedStat").textContent = gamesPlayed;
 
-    document.getElementById(
-        "gamesPlayedStat"
-    ).textContent = gamesPlayed;
+  document.getElementById("lifetimeClicksStat").textContent = lifetimeClicks;
 
-    document.getElementById(
-        "lifetimeClicksStat"
-    ).textContent = lifetimeClicks;
+  document.getElementById("lifetimeCoinsStat").textContent = lifetimeCoins;
 
-    document.getElementById(
-        "lifetimeCoinsStat"
-    ).textContent = lifetimeCoins;
+  document.getElementById("highestLevelStat").textContent = level;
 
-    document.getElementById(
-    "highestLevelStat"
-).textContent = level;
+  document.getElementById("highScore").textContent = highScore;
 
-document.getElementById(
-    "highScore"
-).textContent = highScore;
+  document.getElementById("accuracy").textContent = accuracyDisplay.textContent;
 
-document.getElementById(
-    "accuracy"
-).textContent =
-    accuracyDisplay.textContent;
+  document.getElementById("misses").textContent = misses;
 
-document.getElementById(
-    "misses"
-).textContent = misses;
-
-statsScreen.hidden = false;
+  statsScreen.hidden = false;
 });
 
 closeStats.addEventListener("click", () => {
+  statsScreen.hidden = true;
 
-    statsScreen.hidden = true;
-
-    if(layout.hidden){
-
-        mainMenu.hidden = false;
-    }
+  if (layout.hidden) {
+    mainMenu.hidden = false;
+  }
 });
-difficultySelect.addEventListener(
-    "change",
-    applyDifficulty
-);
+difficultySelect.addEventListener("change", applyDifficulty);
 
 setInterval(() => {
+  if (gameOver || gamePaused) return;
 
-    if(gameOver || gamePaused)
-        return;
+  const roll = Math.random();
 
-    const roll =
-        Math.random();
-
-    if(roll < 0.25){
-
+  if (roll < 0.25) {
     showPowerup("xp");
-}
-
-else if(roll < 0.50){
-
+  } else if (roll < 0.5) {
     showPowerup("coins");
-}
-
-else if(roll < 0.75){
-
+  } else if (roll < 0.75) {
     showPowerup("slow");
-}
-
-else{
-
+  } else {
     showPowerup("freeze");
-}
-
+  }
 }, 20000);
 
 setInterval(() => {
+  if (doubleXP && doubleXPTime > 0) doubleXPTime--;
 
-    if(doubleXP && doubleXPTime > 0)
-        doubleXPTime--;
+  if (doubleCoins && doubleCoinsTime > 0) doubleCoinsTime--;
 
-    if(doubleCoins && doubleCoinsTime > 0)
-        doubleCoinsTime--;
+  if (slowButton && slowButtonTime > 0) slowButtonTime--;
 
-    if(slowButton && slowButtonTime > 0)
-        slowButtonTime--;
+  if (freezeButton && freezeButtonTime > 0) freezeButtonTime--;
 
-    if(freezeButton && freezeButtonTime > 0)
-        freezeButtonTime--;
-
-    updatePowerupStatus();
-
+  updatePowerupStatus();
 }, 1000);
 
-playBtn.addEventListener(
-    "click",
-    () => {
+playBtn.addEventListener("click", () => {
+  mainMenu.hidden = true;
 
-        mainMenu.hidden = true;
+  layout.hidden = false;
 
-        layout.hidden = false;
+  startTimer();
+});
 
-        startTimer();
-    }
-);
+menuStatsBtn.addEventListener("click", () => {
+  mainMenu.hidden = true;
 
-menuStatsBtn.addEventListener(
-    "click",
-    () => {
+  statsScreen.hidden = false;
+});
 
-        mainMenu.hidden = true;
+menuShopBtn.addEventListener("click", () => {
+  mainMenu.hidden = true;
 
-        statsScreen.hidden = false;
-    }
-);
+  shop.hidden = false;
+});
 
-menuShopBtn.addEventListener(
-    "click",
-    () => {
+function applyTheme(theme) {
+  const body = document.body;
 
-        mainMenu.hidden = true;
+  const sidebar = document.getElementById("sidebar");
 
-        shop.hidden = false;
-    }
-);
+  const arena = document.getElementById("gameArena");
 
-function applyTheme(theme){
+  switch (theme) {
+    case "space":
+      body.style.background = "linear-gradient(135deg,#020617,#312e81)";
 
-    const body =
-        document.body;
+      sidebar.style.boxShadow = "0 0 25px rgba(99,102,241,.5)";
 
-    const sidebar =
-        document.getElementById(
-            "sidebar"
-        );
+      arena.style.boxShadow = "0 0 40px rgba(99,102,241,.4)";
 
-    const arena =
-        document.getElementById(
-            "gameArena"
-        );
+      arena.style.background = "rgba(15,23,42,.35)";
 
-    switch(theme){
+      break;
 
-        case "space":
+    case "ocean":
+      body.style.background = "linear-gradient(135deg,#0c4a6e,#06b6d4)";
 
-            body.style.background =
-                "linear-gradient(135deg,#020617,#312e81)";
+      sidebar.style.boxShadow = "0 0 25px rgba(6,182,212,.5)";
 
-            sidebar.style.boxShadow =
-                "0 0 25px rgba(99,102,241,.5)";
+      arena.style.boxShadow = "0 0 40px rgba(6,182,212,.4)";
 
-            arena.style.boxShadow =
-                "0 0 40px rgba(99,102,241,.4)";
+      arena.style.background = "rgba(8,145,178,.2)";
 
-            arena.style.background =
-                "rgba(15,23,42,.35)";
+      break;
 
-            break;
+    case "lava":
+      body.style.background = "linear-gradient(135deg,#7f1d1d,#f97316)";
 
-        case "ocean":
+      sidebar.style.boxShadow = "0 0 25px rgba(249,115,22,.6)";
 
-            body.style.background =
-                "linear-gradient(135deg,#0c4a6e,#06b6d4)";
+      arena.style.boxShadow = "0 0 40px rgba(249,115,22,.5)";
 
-            sidebar.style.boxShadow =
-                "0 0 25px rgba(6,182,212,.5)";
+      arena.style.background = "rgba(127,29,29,.25)";
 
-            arena.style.boxShadow =
-                "0 0 40px rgba(6,182,212,.4)";
+      break;
 
-            arena.style.background =
-                "rgba(8,145,178,.2)";
+    case "forest":
+      body.style.background = "linear-gradient(135deg,#14532d,#22c55e)";
 
-            break;
+      sidebar.style.boxShadow = "0 0 25px rgba(34,197,94,.5)";
 
-        case "lava":
+      arena.style.boxShadow = "0 0 40px rgba(34,197,94,.4)";
 
-            body.style.background =
-                "linear-gradient(135deg,#7f1d1d,#f97316)";
+      arena.style.background = "rgba(20,83,45,.25)";
 
-            sidebar.style.boxShadow =
-                "0 0 25px rgba(249,115,22,.6)";
+      break;
 
-            arena.style.boxShadow =
-                "0 0 40px rgba(249,115,22,.5)";
+    default:
+      body.style.background = "linear-gradient(135deg,#0f172a,#1e293b)";
 
-            arena.style.background =
-                "rgba(127,29,29,.25)";
+      sidebar.style.boxShadow = "none";
 
-            break;
+      arena.style.boxShadow = "inset 0 0 30px rgba(0,255,255,.08)";
 
-        case "forest":
-
-            body.style.background =
-                "linear-gradient(135deg,#14532d,#22c55e)";
-
-            sidebar.style.boxShadow =
-                "0 0 25px rgba(34,197,94,.5)";
-
-            arena.style.boxShadow =
-                "0 0 40px rgba(34,197,94,.4)";
-
-            arena.style.background =
-                "rgba(20,83,45,.25)";
-
-            break;
-
-        default:
-
-    body.style.background =
-        "linear-gradient(135deg,#0f172a,#1e293b)";
-
-    sidebar.style.boxShadow =
-        "none";
-
-    arena.style.boxShadow =
-        "inset 0 0 30px rgba(0,255,255,.08)";
-
-    arena.style.background =
+      arena.style.background =
         "linear-gradient(135deg,rgba(255,255,255,.02),rgba(0,255,255,.03))";
 
-    break;
-    }
+      break;
+  }
 }
 
-spaceThemeBtn.addEventListener(
-    "click",
-    () => {
+spaceThemeBtn.addEventListener("click", () => {
+  if (ownedThemes.includes("space")) {
+    selectedTheme = "space";
 
-        if(
-            ownedThemes.includes(
-                "space"
-            )
-        ){
+    applyTheme("space");
+  } else {
+    if (coins < 500) return;
 
-            selectedTheme =
-                "space";
+    coins -= 500;
 
-            applyTheme(
-                "space"
-            );
+    ownedThemes.push("space");
 
-        } else {
-
-            if(coins < 500)
-                return;
-
-            coins -= 500;
-
-            ownedThemes.push(
-                "space"
-            );
-
-            selectedTheme =
-                "space";
-
-            applyTheme(
-                "space"
-            );
-        }
-
-        coinsDisplay.textContent =
-            coins;
-
-        localStorage.setItem(
-            "coins",
-            coins
-        );
+    selectedTheme = "space";
 
-        localStorage.setItem(
-            "selectedTheme",
-            selectedTheme
-        );
+    applyTheme("space");
+  }
 
-        localStorage.setItem(
-            "ownedThemes",
-            JSON.stringify(
-                ownedThemes
-            )
-        );
+  coinsDisplay.textContent = coins;
 
-        updateThemeUI();
-    }
-);
+  localStorage.setItem("coins", coins);
 
-oceanThemeBtn.addEventListener(
-    "click",
-    () => {
+  localStorage.setItem("selectedTheme", selectedTheme);
 
-        if(
-            ownedThemes.includes(
-                "ocean"
-            )
-        ){
+  localStorage.setItem("ownedThemes", JSON.stringify(ownedThemes));
 
-            selectedTheme =
-                "ocean";
+  updateThemeUI();
+});
 
-            applyTheme(
-                "ocean"
-            );
+oceanThemeBtn.addEventListener("click", () => {
+  if (ownedThemes.includes("ocean")) {
+    selectedTheme = "ocean";
 
-        } else {
-
-            if(coins < 750)
-                return;
-
-            coins -= 750;
-
-            ownedThemes.push(
-                "ocean"
-            );
-
-            selectedTheme =
-                "ocean";
-
-            applyTheme(
-                "ocean"
-            );
-        }
-
-        coinsDisplay.textContent =
-            coins;
-
-        localStorage.setItem(
-            "coins",
-            coins
-        );
-
-        localStorage.setItem(
-            "selectedTheme",
-            selectedTheme
-        );
+    applyTheme("ocean");
+  } else {
+    if (coins < 750) return;
 
-        localStorage.setItem(
-            "ownedThemes",
-            JSON.stringify(
-                ownedThemes
-            )
-        );
-
-        updateThemeUI();
-    }
-);
+    coins -= 750;
 
-lavaThemeBtn.addEventListener(
-    "click",
-    () => {
-
-        if(
-            ownedThemes.includes(
-                "lava"
-            )
-        ){
-
-            selectedTheme =
-                "lava";
-
-            applyTheme(
-                "lava"
-            );
-
-        } else {
-
-            if(coins < 1000)
-                return;
-
-            coins -= 1000;
-
-            ownedThemes.push(
-                "lava"
-            );
-
-            selectedTheme =
-                "lava";
-
-            applyTheme(
-                "lava"
-            );
-        }
-
-        coinsDisplay.textContent =
-            coins;
-
-        localStorage.setItem(
-            "coins",
-            coins
-        );
-
-        localStorage.setItem(
-            "selectedTheme",
-            selectedTheme
-        );
-
-        localStorage.setItem(
-            "ownedThemes",
-            JSON.stringify(
-                ownedThemes
-            )
-        );
-
-        updateThemeUI();
-    }
-);
-
-forestThemeBtn.addEventListener(
-    "click",
-    () => {
-
-        if(
-            ownedThemes.includes(
-                "forest"
-            )
-        ){
-
-            selectedTheme =
-                "forest";
-
-            applyTheme(
-                "forest"
-            );
-
-        } else {
-
-            if(coins < 1250)
-                return;
-
-            coins -= 1250;
-
-            ownedThemes.push(
-                "forest"
-            );
-
-            selectedTheme =
-                "forest";
-
-            applyTheme(
-                "forest"
-            );
-        }
-
-        coinsDisplay.textContent =
-            coins;
-
-        localStorage.setItem(
-            "coins",
-            coins
-        );
-
-        localStorage.setItem(
-            "selectedTheme",
-            selectedTheme
-        );
-
-        localStorage.setItem(
-            "ownedThemes",
-            JSON.stringify(
-                ownedThemes
-            )
-        );
-
-        updateThemeUI();
-    }
-);
-
-defaultThemeBtn.addEventListener(
-    "click",
-    () => {
-
-        selectedTheme =
-            "default";
-
-        applyTheme(
-            "default"
-        );
-
-        localStorage.setItem(
-            "selectedTheme",
-            selectedTheme
-        );
-
-        updateThemeUI();
-    }
-);
+    ownedThemes.push("ocean");
+
+    selectedTheme = "ocean";
+
+    applyTheme("ocean");
+  }
+
+  coinsDisplay.textContent = coins;
+
+  localStorage.setItem("coins", coins);
+
+  localStorage.setItem("selectedTheme", selectedTheme);
+
+  localStorage.setItem("ownedThemes", JSON.stringify(ownedThemes));
+
+  updateThemeUI();
+});
+
+lavaThemeBtn.addEventListener("click", () => {
+  if (ownedThemes.includes("lava")) {
+    selectedTheme = "lava";
+
+    applyTheme("lava");
+  } else {
+    if (coins < 1000) return;
+
+    coins -= 1000;
+
+    ownedThemes.push("lava");
+
+    selectedTheme = "lava";
+
+    applyTheme("lava");
+  }
+
+  coinsDisplay.textContent = coins;
+
+  localStorage.setItem("coins", coins);
+
+  localStorage.setItem("selectedTheme", selectedTheme);
+
+  localStorage.setItem("ownedThemes", JSON.stringify(ownedThemes));
+
+  updateThemeUI();
+});
+
+forestThemeBtn.addEventListener("click", () => {
+  if (ownedThemes.includes("forest")) {
+    selectedTheme = "forest";
+
+    applyTheme("forest");
+  } else {
+    if (coins < 1250) return;
+
+    coins -= 1250;
+
+    ownedThemes.push("forest");
+
+    selectedTheme = "forest";
+
+    applyTheme("forest");
+  }
+
+  coinsDisplay.textContent = coins;
+
+  localStorage.setItem("coins", coins);
+
+  localStorage.setItem("selectedTheme", selectedTheme);
+
+  localStorage.setItem("ownedThemes", JSON.stringify(ownedThemes));
+
+  updateThemeUI();
+});
+
+defaultThemeBtn.addEventListener("click", () => {
+  selectedTheme = "default";
+
+  applyTheme("default");
+
+  localStorage.setItem("selectedTheme", selectedTheme);
+
+  updateThemeUI();
+});
