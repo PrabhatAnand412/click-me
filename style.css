@@ -792,6 +792,12 @@ h1 {
 
     display: none !important;
 }
+
+#layout[hidden]{
+
+    display: none !important;
+}
+
 .menuCard{
 
     width: min(90%, 420px);
