@@ -1036,6 +1036,11 @@ shopBtn.addEventListener("click", () => {
 closeShop.addEventListener("click", () => {
 
     shop.hidden = true;
+
+    if(layout.hidden){
+
+        mainMenu.hidden = false;
+    }
 });
 
 blueSkinBtn.addEventListener(
@@ -1263,8 +1268,12 @@ statsScreen.hidden = false;
 closeStats.addEventListener("click", () => {
 
     statsScreen.hidden = true;
-});
 
+    if(layout.hidden){
+
+        mainMenu.hidden = false;
+    }
+});
 difficultySelect.addEventListener(
     "change",
     applyDifficulty
@@ -1326,6 +1335,8 @@ menuStatsBtn.addEventListener(
     "click",
     () => {
 
+        mainMenu.hidden = true;
+
         statsScreen.hidden = false;
     }
 );
@@ -1333,6 +1344,8 @@ menuStatsBtn.addEventListener(
 menuShopBtn.addEventListener(
     "click",
     () => {
+
+        mainMenu.hidden = true;
 
         shop.hidden = false;
     }
