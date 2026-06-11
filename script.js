@@ -152,6 +152,18 @@ let selectedSkin =
 const savedSkin =
     localStorage.getItem("skin");
 
+let ownedThemes =
+    JSON.parse(
+        localStorage.getItem(
+            "ownedThemes"
+        )
+    ) || ["default"];
+
+let selectedTheme =
+    localStorage.getItem(
+        "selectedTheme"
+    ) || "default";
+
 highScoreDisplay.textContent = highScore;
 levelDisplay.textContent = level;
 coinsDisplay.textContent = coins;
@@ -931,6 +943,10 @@ window.addEventListener("load", () => {
 applyDifficulty();
 updatePowerupStatus();
 updateShopUI();
+applyTheme(
+    selectedTheme
+);
+updateThemeUI();
 
 timerDisplay.textContent =
     timeLeft;
@@ -998,6 +1014,31 @@ const rainbowSkinBtn =
         "rainbowSkin"
     );
 
+const spaceThemeBtn =
+    document.getElementById(
+        "spaceTheme"
+    );
+
+const oceanThemeBtn =
+    document.getElementById(
+        "oceanTheme"
+    );
+
+const lavaThemeBtn =
+    document.getElementById(
+        "lavaTheme"
+    );
+
+const forestThemeBtn =
+    document.getElementById(
+        "forestTheme"
+    );
+
+const defaultThemeBtn =
+    document.getElementById(
+        "defaultTheme"
+    );
+
 function updateShopUI() {
 
     blueSkinBtn.textContent =
@@ -1026,6 +1067,50 @@ function updateShopUI() {
             : "Owned"
         )
         : "Buy";
+}
+
+function updateThemeUI() {
+
+    spaceThemeBtn.textContent =
+        ownedThemes.includes("space")
+        ? (
+            selectedTheme === "space"
+            ? "Selected"
+            : "Owned"
+        )
+        : "Buy";
+
+    oceanThemeBtn.textContent =
+        ownedThemes.includes("ocean")
+        ? (
+            selectedTheme === "ocean"
+            ? "Selected"
+            : "Owned"
+        )
+        : "Buy";
+
+    lavaThemeBtn.textContent =
+        ownedThemes.includes("lava")
+        ? (
+            selectedTheme === "lava"
+            ? "Selected"
+            : "Owned"
+        )
+        : "Buy";
+
+    forestThemeBtn.textContent =
+        ownedThemes.includes("forest")
+        ? (
+            selectedTheme === "forest"
+            ? "Selected"
+            : "Owned"
+        )
+        : "Buy";
+
+    defaultThemeBtn.textContent =
+    selectedTheme === "default"
+    ? "Selected"
+    : "Owned";
 }
 
 shopBtn.addEventListener("click", () => {
@@ -1348,5 +1433,364 @@ menuShopBtn.addEventListener(
         mainMenu.hidden = true;
 
         shop.hidden = false;
+    }
+);
+
+function applyTheme(theme){
+
+    const body =
+        document.body;
+
+    const sidebar =
+        document.getElementById(
+            "sidebar"
+        );
+
+    const arena =
+        document.getElementById(
+            "gameArena"
+        );
+
+    switch(theme){
+
+        case "space":
+
+            body.style.background =
+                "linear-gradient(135deg,#020617,#312e81)";
+
+            sidebar.style.boxShadow =
+                "0 0 25px rgba(99,102,241,.5)";
+
+            arena.style.boxShadow =
+                "0 0 40px rgba(99,102,241,.4)";
+
+            arena.style.background =
+                "rgba(15,23,42,.35)";
+
+            break;
+
+        case "ocean":
+
+            body.style.background =
+                "linear-gradient(135deg,#0c4a6e,#06b6d4)";
+
+            sidebar.style.boxShadow =
+                "0 0 25px rgba(6,182,212,.5)";
+
+            arena.style.boxShadow =
+                "0 0 40px rgba(6,182,212,.4)";
+
+            arena.style.background =
+                "rgba(8,145,178,.2)";
+
+            break;
+
+        case "lava":
+
+            body.style.background =
+                "linear-gradient(135deg,#7f1d1d,#f97316)";
+
+            sidebar.style.boxShadow =
+                "0 0 25px rgba(249,115,22,.6)";
+
+            arena.style.boxShadow =
+                "0 0 40px rgba(249,115,22,.5)";
+
+            arena.style.background =
+                "rgba(127,29,29,.25)";
+
+            break;
+
+        case "forest":
+
+            body.style.background =
+                "linear-gradient(135deg,#14532d,#22c55e)";
+
+            sidebar.style.boxShadow =
+                "0 0 25px rgba(34,197,94,.5)";
+
+            arena.style.boxShadow =
+                "0 0 40px rgba(34,197,94,.4)";
+
+            arena.style.background =
+                "rgba(20,83,45,.25)";
+
+            break;
+
+        default:
+
+    body.style.background =
+        "linear-gradient(135deg,#0f172a,#1e293b)";
+
+    sidebar.style.boxShadow =
+        "none";
+
+    arena.style.boxShadow =
+        "inset 0 0 30px rgba(0,255,255,.08)";
+
+    arena.style.background =
+        "linear-gradient(135deg,rgba(255,255,255,.02),rgba(0,255,255,.03))";
+
+    break;
+    }
+}
+
+spaceThemeBtn.addEventListener(
+    "click",
+    () => {
+
+        if(
+            ownedThemes.includes(
+                "space"
+            )
+        ){
+
+            selectedTheme =
+                "space";
+
+            applyTheme(
+                "space"
+            );
+
+        } else {
+
+            if(coins < 500)
+                return;
+
+            coins -= 500;
+
+            ownedThemes.push(
+                "space"
+            );
+
+            selectedTheme =
+                "space";
+
+            applyTheme(
+                "space"
+            );
+        }
+
+        coinsDisplay.textContent =
+            coins;
+
+        localStorage.setItem(
+            "coins",
+            coins
+        );
+
+        localStorage.setItem(
+            "selectedTheme",
+            selectedTheme
+        );
+
+        localStorage.setItem(
+            "ownedThemes",
+            JSON.stringify(
+                ownedThemes
+            )
+        );
+
+        updateThemeUI();
+    }
+);
+
+oceanThemeBtn.addEventListener(
+    "click",
+    () => {
+
+        if(
+            ownedThemes.includes(
+                "ocean"
+            )
+        ){
+
+            selectedTheme =
+                "ocean";
+
+            applyTheme(
+                "ocean"
+            );
+
+        } else {
+
+            if(coins < 750)
+                return;
+
+            coins -= 750;
+
+            ownedThemes.push(
+                "ocean"
+            );
+
+            selectedTheme =
+                "ocean";
+
+            applyTheme(
+                "ocean"
+            );
+        }
+
+        coinsDisplay.textContent =
+            coins;
+
+        localStorage.setItem(
+            "coins",
+            coins
+        );
+
+        localStorage.setItem(
+            "selectedTheme",
+            selectedTheme
+        );
+
+        localStorage.setItem(
+            "ownedThemes",
+            JSON.stringify(
+                ownedThemes
+            )
+        );
+
+        updateThemeUI();
+    }
+);
+
+lavaThemeBtn.addEventListener(
+    "click",
+    () => {
+
+        if(
+            ownedThemes.includes(
+                "lava"
+            )
+        ){
+
+            selectedTheme =
+                "lava";
+
+            applyTheme(
+                "lava"
+            );
+
+        } else {
+
+            if(coins < 1000)
+                return;
+
+            coins -= 1000;
+
+            ownedThemes.push(
+                "lava"
+            );
+
+            selectedTheme =
+                "lava";
+
+            applyTheme(
+                "lava"
+            );
+        }
+
+        coinsDisplay.textContent =
+            coins;
+
+        localStorage.setItem(
+            "coins",
+            coins
+        );
+
+        localStorage.setItem(
+            "selectedTheme",
+            selectedTheme
+        );
+
+        localStorage.setItem(
+            "ownedThemes",
+            JSON.stringify(
+                ownedThemes
+            )
+        );
+
+        updateThemeUI();
+    }
+);
+
+forestThemeBtn.addEventListener(
+    "click",
+    () => {
+
+        if(
+            ownedThemes.includes(
+                "forest"
+            )
+        ){
+
+            selectedTheme =
+                "forest";
+
+            applyTheme(
+                "forest"
+            );
+
+        } else {
+
+            if(coins < 1250)
+                return;
+
+            coins -= 1250;
+
+            ownedThemes.push(
+                "forest"
+            );
+
+            selectedTheme =
+                "forest";
+
+            applyTheme(
+                "forest"
+            );
+        }
+
+        coinsDisplay.textContent =
+            coins;
+
+        localStorage.setItem(
+            "coins",
+            coins
+        );
+
+        localStorage.setItem(
+            "selectedTheme",
+            selectedTheme
+        );
+
+        localStorage.setItem(
+            "ownedThemes",
+            JSON.stringify(
+                ownedThemes
+            )
+        );
+
+        updateThemeUI();
+    }
+);
+
+defaultThemeBtn.addEventListener(
+    "click",
+    () => {
+
+        selectedTheme =
+            "default";
+
+        applyTheme(
+            "default"
+        );
+
+        localStorage.setItem(
+            "selectedTheme",
+            selectedTheme
+        );
+
+        updateThemeUI();
     }
 );
