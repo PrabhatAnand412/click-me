@@ -112,6 +112,10 @@ let doubleCoinsTime = 0;
 
 let slowButtonTime = 0;
 
+let freezeButton = false;
+
+let freezeButtonTime = 0;
+
 let gameOver = false;
 let gamePaused = false;
 
@@ -468,6 +472,9 @@ function showPowerup(type) {
     if(type === "slow")
         powerup.textContent = "⚡";
 
+    if(type === "freeze")
+        powerup.textContent = "🧊";
+
     powerup.addEventListener(
         "click",
         () => {
@@ -545,6 +552,27 @@ function activatePowerup(type){
 
     }, 10000);
 }
+
+if(type === "freeze"){
+
+    freezeButton = true;
+
+    freezeButtonTime = 5;
+
+    updatePowerupStatus();
+
+    message.textContent =
+        "🧊 Freeze Button";
+
+    setTimeout(() => {
+
+        freezeButton = false;
+
+        updatePowerupStatus();
+
+    }, 5000);
+}
+
 }
 
 function updatePowerupStatus() {
@@ -565,6 +593,11 @@ function updatePowerupStatus() {
         active.push(
             `⚡ Slow (${slowButtonTime}s)`
         );
+        
+        if(freezeButton)
+    active.push(
+        `🧊 Freeze (${freezeButtonTime}s)`
+    );
 
     powerupStatus.textContent =
         active.length
@@ -577,6 +610,9 @@ document.addEventListener("mousemove", (e) => {
     if(isTouchDevice) return;
 
     if (gameOver) return;
+
+    if(freezeButton)
+    return;
 
     const rect =
         button.getBoundingClientRect();
@@ -1372,20 +1408,25 @@ setInterval(() => {
     const roll =
         Math.random();
 
-    if(roll < 0.33){
+    if(roll < 0.25){
 
-        showPowerup("xp");
-    }
+    showPowerup("xp");
+}
 
-    else if(roll < 0.66){
+else if(roll < 0.50){
 
-        showPowerup("coins");
-    }
+    showPowerup("coins");
+}
 
-    else{
+else if(roll < 0.75){
 
-        showPowerup("slow");
-    }
+    showPowerup("slow");
+}
+
+else{
+
+    showPowerup("freeze");
+}
 
 }, 20000);
 
@@ -1399,6 +1440,9 @@ setInterval(() => {
 
     if(slowButton && slowButtonTime > 0)
         slowButtonTime--;
+
+    if(freezeButton && freezeButtonTime > 0)
+        freezeButtonTime--;
 
     updatePowerupStatus();
 
