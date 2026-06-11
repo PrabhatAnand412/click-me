@@ -765,3 +765,81 @@ h1 {
 
     font-size: .9rem;
 }
+
+#mainMenu{
+
+    position: fixed;
+
+    inset: 0;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(15,23,42,.95),
+            rgba(30,41,59,.95)
+        );
+
+    z-index: 9999;
+}
+
+#mainMenu[hidden]{
+
+    display: none !important;
+}
+.menuCard{
+
+    width: min(90%, 420px);
+
+    padding: 2rem;
+
+    border-radius: 24px;
+
+    background:
+        rgba(255,255,255,.08);
+
+    backdrop-filter:
+        blur(16px);
+
+    border:
+        1px solid rgba(255,255,255,.15);
+
+    text-align: center;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.4);
+}
+
+.menuCard h1{
+
+    margin-bottom: 1rem;
+}
+
+.menuCard p{
+
+    opacity: .8;
+
+    margin-bottom: 1.5rem;
+}
+
+.menuCard button{
+
+    width: 100%;
+
+    margin: .5rem 0;
+
+    padding: .9rem;
+
+    border: none;
+
+    border-radius: 14px;
+
+    cursor: pointer;
+
+    font-size: 1rem;
+}

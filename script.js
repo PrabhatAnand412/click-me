@@ -6,6 +6,30 @@ const highScoreDisplay = document.getElementById("highScore");
 const timerDisplay = document.getElementById("timer");
 const message = document.getElementById("message");
 const fakeContainer = document.getElementById("fakeContainer");
+const mainMenu =
+    document.getElementById(
+        "mainMenu"
+    );
+
+const playBtn =
+    document.getElementById(
+        "playBtn"
+    );
+
+const menuStatsBtn =
+    document.getElementById(
+        "menuStatsBtn"
+    );
+
+const menuShopBtn =
+    document.getElementById(
+        "menuShopBtn"
+    );
+
+const layout =
+    document.getElementById(
+        "layout"
+    );
 const gameArena =
     document.getElementById(
         "gameArena"
@@ -82,6 +106,12 @@ let doubleCoins = false;
 
 let slowButton = false;
 
+let doubleXPTime = 0;
+
+let doubleCoinsTime = 0;
+
+let slowButtonTime = 0;
+
 let gameOver = false;
 let gamePaused = false;
 
@@ -108,6 +138,17 @@ let lifetimeCoins =
             "lifetimeCoins"
         )
     ) || 0; 
+let ownedSkins =
+    JSON.parse(
+        localStorage.getItem(
+            "ownedSkins"
+        )
+    ) || ["default"];
+
+let selectedSkin =
+    localStorage.getItem(
+        "selectedSkin"
+    ) || "default";
 const savedSkin =
     localStorage.getItem("skin");
 
@@ -439,6 +480,7 @@ function activatePowerup(type){
     if(type === "xp"){
 
     doubleXP = true;
+    doubleXPTime = 10;
 
     updatePowerupStatus();
 
@@ -457,6 +499,7 @@ function activatePowerup(type){
     if(type === "coins"){
 
     doubleCoins = true;
+    doubleCoinsTime = 10;
 
     updatePowerupStatus();
 
@@ -475,6 +518,7 @@ function activatePowerup(type){
     if(type === "slow"){
 
     slowButton = true;
+    slowButtonTime = 10;
 
     updatePowerupStatus();
 
@@ -496,13 +540,19 @@ function updatePowerupStatus() {
     const active = [];
 
     if(doubleXP)
-        active.push("⭐ Double XP");
+        active.push(
+            `⭐ XP (${doubleXPTime}s)`
+        );
 
     if(doubleCoins)
-        active.push("🪙 Double Coins");
+        active.push(
+            `🪙 Coins (${doubleCoinsTime}s)`
+        );
 
     if(slowButton)
-        active.push("⚡ Slow Button");
+        active.push(
+            `⚡ Slow (${slowButtonTime}s)`
+        );
 
     powerupStatus.textContent =
         active.length
@@ -868,6 +918,7 @@ window.addEventListener("load", () => {
 
 applyDifficulty();
 updatePowerupStatus();
+updateShopUI();
 
     const rect =
         button.getBoundingClientRect();
@@ -917,6 +968,51 @@ document.addEventListener(
     }
 );
 
+const blueSkinBtn =
+    document.getElementById(
+        "blueSkin"
+    );
+
+const goldSkinBtn =
+    document.getElementById(
+        "goldSkin"
+    );
+
+const rainbowSkinBtn =
+    document.getElementById(
+        "rainbowSkin"
+    );
+
+function updateShopUI() {
+
+    blueSkinBtn.textContent =
+        ownedSkins.includes("blue")
+        ? (
+            selectedSkin === "blue"
+            ? "Selected"
+            : "Owned"
+        )
+        : "Buy";
+
+    goldSkinBtn.textContent =
+        ownedSkins.includes("gold")
+        ? (
+            selectedSkin === "gold"
+            ? "Selected"
+            : "Owned"
+        )
+        : "Buy";
+
+    rainbowSkinBtn.textContent =
+        ownedSkins.includes("rainbow")
+        ? (
+            selectedSkin === "rainbow"
+            ? "Selected"
+            : "Owned"
+        )
+        : "Buy";
+}
+
 shopBtn.addEventListener("click", () => {
 
     shop.hidden = false;
@@ -927,77 +1023,193 @@ closeShop.addEventListener("click", () => {
     shop.hidden = true;
 });
 
-document.getElementById(
-    "blueSkin"
-).addEventListener("click", () => {
+blueSkinBtn.addEventListener(
+    "click",
+    () => {
 
-    if(coins < 50)
-        return;
+        if(
+            ownedSkins.includes(
+                "blue"
+            )
+        ){
 
-    coins -= 50;
+            selectedSkin =
+                "blue";
 
-    coinsDisplay.textContent =
-        coins;
+            button.style.background =
+                "#3b82f6";
 
-    button.style.background =
-        "#3b82f6";
+        } else {
+
+            if(coins < 50)
+                return;
+
+            coins -= 50;
+
+            ownedSkins.push(
+                "blue"
+            );
+
+            selectedSkin =
+                "blue";
+
+            button.style.background =
+                "#3b82f6";
+        }
+
+        coinsDisplay.textContent =
+            coins;
+
+        localStorage.setItem(
+            "coins",
+            coins
+        );
+
+        localStorage.setItem(
+            "selectedSkin",
+            selectedSkin
+        );
+
+        localStorage.setItem(
+            "ownedSkins",
+            JSON.stringify(
+                ownedSkins
+            )
+        );
+
         localStorage.setItem(
     "skin",
     "#3b82f6"
 );
-});
 
-document.getElementById(
-    "goldSkin"
-).addEventListener("click", () => {
+        updateShopUI();
+    }
+);
 
-    if(coins < 100)
-        return;
+goldSkinBtn.addEventListener(
+    "click",
+    () => {
 
-    coins -= 100;
+        if(
+            ownedSkins.includes(
+                "gold"
+            )
+        ){
 
-    coinsDisplay.textContent =
-        coins;
+            selectedSkin =
+                "gold";
 
-    localStorage.setItem(
-        "coins",
-        coins
-    );
+            button.style.background =
+                "gold";
 
-    button.style.background =
-        "gold";
+        } else {
+
+            if(coins < 100)
+                return;
+
+            coins -= 100;
+
+            ownedSkins.push(
+                "gold"
+            );
+
+            selectedSkin =
+                "gold";
+
+            button.style.background =
+                "gold";
+        }
+
+        coinsDisplay.textContent =
+            coins;
 
         localStorage.setItem(
-    "skin",
-    "gold"
-);
-});
-
-document.getElementById(
-    "rainbowSkin"
-).addEventListener("click", () => {
-
-    if(coins < 250)
-        return;
-
-    coins -= 250;
-
-    coinsDisplay.textContent =
-        coins;
-
-    localStorage.setItem(
-        "coins",
-        coins
-    );
-
-    button.style.backgroundImage =
-    "linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet)";
+            "coins",
+            coins
+        );
 
         localStorage.setItem(
-    "skin",
-    "linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet)"
+            "selectedSkin",
+            selectedSkin
+        );
+
+        localStorage.setItem(
+            "ownedSkins",
+            JSON.stringify(
+                ownedSkins
+            )
+        );
+
+        localStorage.setItem(
+            "skin",
+            "gold"
+        );
+
+        updateShopUI();
+    }
 );
-});
+rainbowSkinBtn.addEventListener(
+    "click",
+    () => {
+
+        if(
+            ownedSkins.includes(
+                "rainbow"
+            )
+        ){
+
+            selectedSkin =
+                "rainbow";
+
+            button.style.backgroundImage =
+                "linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet)";
+
+        } else {
+
+            if(coins < 250)
+                return;
+
+            coins -= 250;
+
+            ownedSkins.push(
+                "rainbow"
+            );
+
+            selectedSkin =
+                "rainbow";
+
+            button.style.backgroundImage =
+                "linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet)";
+        }
+
+        coinsDisplay.textContent =
+            coins;
+
+        localStorage.setItem(
+            "coins",
+            coins
+        );
+
+        localStorage.setItem(
+            "selectedSkin",
+            selectedSkin
+        );
+
+        localStorage.setItem(
+            "ownedSkins",
+            JSON.stringify(
+                ownedSkins
+            )
+        );
+
+        localStorage.setItem(
+            "skin",
+            "linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet)"
+        );
+
+        updateShopUI();
+    }
+);
 
 statsBtn.addEventListener("click", () => {
 
@@ -1067,3 +1279,44 @@ setInterval(() => {
     }
 
 }, 20000);
+
+setInterval(() => {
+
+    if(doubleXP && doubleXPTime > 0)
+        doubleXPTime--;
+
+    if(doubleCoins && doubleCoinsTime > 0)
+        doubleCoinsTime--;
+
+    if(slowButton && slowButtonTime > 0)
+        slowButtonTime--;
+
+    updatePowerupStatus();
+
+}, 1000);
+
+playBtn.addEventListener(
+    "click",
+    () => {
+
+        mainMenu.hidden = true;
+
+        layout.hidden = false;
+    }
+);
+
+menuStatsBtn.addEventListener(
+    "click",
+    () => {
+
+        statsScreen.hidden = false;
+    }
+);
+
+menuShopBtn.addEventListener(
+    "click",
+    () => {
+
+        shop.hidden = false;
+    }
+);
