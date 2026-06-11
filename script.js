@@ -890,35 +890,50 @@ localStorage.setItem(
 
 let timeLeft = 60;
 
-const timer = setInterval(() => {
+let timerStarted = false;
 
-    if (gameOver || gamePaused)
-    return;
+let timer;
 
-    timeLeft--;
+function startTimer() {
 
-    timerDisplay.textContent =
-        timeLeft;
+    if(timerStarted)
+        return;
 
-    if (timeLeft <= 0) {
+    timerStarted = true;
 
-        gameOver = true;
+    timer = setInterval(() => {
 
-        clearInterval(timer);
+        if(gameOver || gamePaused)
+            return;
 
-        showGameOver();
+        timeLeft--;
 
-        message.textContent =
-            "Game Over!";
-    }
+        timerDisplay.textContent =
+            timeLeft;
 
-}, 1000);
+        if(timeLeft <= 0){
+
+            gameOver = true;
+
+            clearInterval(timer);
+
+            showGameOver();
+
+            message.textContent =
+                "Game Over!";
+        }
+
+    }, 1000);
+}
 
 window.addEventListener("load", () => {
 
 applyDifficulty();
 updatePowerupStatus();
 updateShopUI();
+
+timerDisplay.textContent =
+    timeLeft;
 
     const rect =
         button.getBoundingClientRect();
@@ -1302,6 +1317,8 @@ playBtn.addEventListener(
         mainMenu.hidden = true;
 
         layout.hidden = false;
+
+        startTimer();
     }
 );
 
