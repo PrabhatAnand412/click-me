@@ -10,6 +10,11 @@ const gameArena =
     document.getElementById(
         "gameArena"
     );
+const difficultySelect =
+    document.getElementById(
+        "difficultySelect"
+    );
+
 const shopBtn =
     document.getElementById("shopBtn");
 
@@ -61,6 +66,9 @@ const isTouchDevice =
 
 let dangerDistance =
     isTouchDevice ? 20 : 35;
+
+let currentDifficulty =
+    "normal";
 
 let gameOver = false;
 let gamePaused = false;
@@ -121,6 +129,42 @@ function randomTaunt() {
         Math.floor(Math.random() * taunts.length);
 
     message.textContent = taunts[index];
+}
+
+function applyDifficulty() {
+
+    currentDifficulty =
+        difficultySelect.value;
+
+    switch(currentDifficulty){
+
+        case "easy":
+
+            dangerDistance = 20;
+
+            break;
+
+        case "normal":
+
+            dangerDistance = 35;
+
+            break;
+
+        case "hard":
+
+            dangerDistance = 60;
+
+            break;
+
+        case "nightmare":
+
+            dangerDistance = 100;
+
+            break;
+    }
+
+    message.textContent =
+        `Difficulty: ${currentDifficulty}`;
 }
 
 function unlockAchievement(name) {
@@ -527,31 +571,25 @@ coinsDisplay.textContent =
 
     if (score === 3) {
 
-        dangerDistance = 50;
+    message.textContent =
+        "Level 2 Unlocked!";
+}
 
-        message.textContent =
-            "Level 2 Unlocked!";
-    }
+if (score === 6) {
 
-    if (score === 6) {
+    button.style.scale = "0.9";
 
-        dangerDistance = 70;
+    message.textContent =
+        "Level 3!";
+}
 
-        button.style.scale = "0.9";
+if (score === 10) {
 
-        message.textContent =
-            "Level 3!";
-    }
+    createFakeButtons();
 
-    if (score === 10) {
-
-        dangerDistance = 100;
-
-        createFakeButtons();
-
-        message.textContent =
-            "Fake buttons unlocked!";
-    }
+    message.textContent =
+        "Fake buttons unlocked!";
+}
 
     if (score >= 20) {
 
@@ -621,6 +659,8 @@ const timer = setInterval(() => {
 }, 1000);
 
 window.addEventListener("load", () => {
+
+applyDifficulty();
 
     const rect =
         button.getBoundingClientRect();
@@ -777,3 +817,8 @@ closeStats.addEventListener("click", () => {
 
     statsScreen.hidden = true;
 });
+
+difficultySelect.addEventListener(
+    "change",
+    applyDifficulty
+);
