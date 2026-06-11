@@ -44,6 +44,8 @@ let totalAttempts = 0;
 let xp = 0;
 let level = parseInt(localStorage.getItem("level")) || 1;
 
+let highestLevel = parseInt(localStorage.getItem("highestLevel")) || 1;
+
 let coins = parseInt(localStorage.getItem("coins")) || 0;
 
 const xpNeeded = 100;
@@ -208,6 +210,12 @@ function addXP(amount) {
     levelDisplay.textContent = level;
 
     localStorage.setItem("level", level);
+
+    if (level > highestLevel) {
+      highestLevel = level;
+
+      localStorage.setItem("highestLevel", highestLevel);
+    }
 
     coins += 50;
 
@@ -487,7 +495,9 @@ button.addEventListener("touchstart", (e) => {
 
   setTimeout(
     () => {
-      if (!gameOver) teleportButton();
+      if (!gameOver && !freezeButton) {
+        teleportButton();
+      }
     },
     slowButton ? 300 : 120,
   );
@@ -852,7 +862,7 @@ statsBtn.addEventListener("click", () => {
 
   document.getElementById("lifetimeCoinsStat").textContent = lifetimeCoins;
 
-  document.getElementById("highestLevelStat").textContent = level;
+  document.getElementById("highestLevelStat").textContent = highestLevel;
 
   document.getElementById("highScore").textContent = highScore;
 
