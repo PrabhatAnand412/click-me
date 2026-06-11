@@ -69,6 +69,13 @@ let dangerDistance =
 
 let currentDifficulty =
     "normal";
+let xpReward = 20;
+let coinReward = 5;
+let doubleXP = false;
+
+let doubleCoins = false;
+
+let slowButton = false;
 
 let gameOver = false;
 let gamePaused = false;
@@ -138,30 +145,46 @@ function applyDifficulty() {
 
     switch(currentDifficulty){
 
-        case "easy":
+    case "easy":
 
-            dangerDistance = 20;
+        dangerDistance = 20;
 
-            break;
+        xpReward = 15;
 
-        case "normal":
+        coinReward = 3;
 
-            dangerDistance = 35;
+        break;
 
-            break;
+    case "normal":
 
-        case "hard":
+        dangerDistance = 35;
 
-            dangerDistance = 60;
+        xpReward = 20;
 
-            break;
+        coinReward = 5;
 
-        case "nightmare":
+        break;
 
-            dangerDistance = 100;
+    case "hard":
 
-            break;
-    }
+        dangerDistance = 60;
+
+        xpReward = 30;
+
+        coinReward = 8;
+
+        break;
+
+    case "nightmare":
+
+        dangerDistance = 100;
+
+        xpReward = 50;
+
+        coinReward = 15;
+
+        break;
+}
 
     message.textContent =
         `Difficulty: ${currentDifficulty}`;
@@ -344,6 +367,98 @@ fake.style.top =
     }
 }
 
+function showPowerup(type) {
+
+    const powerup =
+        document.createElement("div");
+
+    powerup.className =
+        "powerup";
+
+    const arenaRect =
+        gameArena.getBoundingClientRect();
+
+    powerup.style.left =
+        Math.random() *
+        (arenaRect.width - 60) + "px";
+
+    powerup.style.top =
+        Math.random() *
+        (arenaRect.height - 60) + "px";
+
+    if(type === "xp")
+        powerup.textContent = "⭐";
+
+    if(type === "coins")
+        powerup.textContent = "🪙";
+
+    if(type === "slow")
+        powerup.textContent = "⚡";
+
+    powerup.addEventListener(
+        "click",
+        () => {
+
+            activatePowerup(type);
+
+            powerup.remove();
+        }
+    );
+
+    gameArena.appendChild(powerup);
+
+    setTimeout(() => {
+
+        powerup.remove();
+
+    }, 8000);
+}
+
+function activatePowerup(type){
+
+    if(type === "xp"){
+
+        doubleXP = true;
+
+        message.textContent =
+            "⭐ Double XP";
+
+        setTimeout(() => {
+
+            doubleXP = false;
+
+        }, 10000);
+    }
+
+    if(type === "coins"){
+
+        doubleCoins = true;
+
+        message.textContent =
+            "🪙 Double Coins";
+
+        setTimeout(() => {
+
+            doubleCoins = false;
+
+        }, 10000);
+    }
+
+    if(type === "slow"){
+
+        slowButton = true;
+
+        message.textContent =
+            "⚡ Slow Button";
+
+        setTimeout(() => {
+
+            slowButton = false;
+
+        }, 10000);
+    }
+}
+
 document.addEventListener("mousemove", (e) => {
 
     if(isTouchDevice) return;
@@ -426,9 +541,16 @@ localStorage.setItem(
 
     scoreDisplay.textContent = score;
 
-    addXP(20);
+    addXP(xpReward);
 
-coins += 5;
+coins += coinReward;
+
+lifetimeCoins += coinReward;
+
+localStorage.setItem(
+    "lifetimeCoins",
+    lifetimeCoins
+);
 
 coinsDisplay.textContent =
     coins;
@@ -439,7 +561,7 @@ localStorage.setItem(
 );
 
 createFloatingText(
-    "+20 XP | +5 Coins"
+    `+${xpReward} XP | +${coinReward} Coins`
 );
 
     updateAccuracy();
@@ -510,16 +632,11 @@ localStorage.setItem(
 
     scoreDisplay.textContent = score;
 
-    addXP(20);
+addXP(xpReward);
 
-    createFloatingText(
-    "+20 XP",
-    -15
-);
+coins += coinReward;
 
-coins += 5;
-
-lifetimeCoins += 5;
+lifetimeCoins += coinReward;
 
 localStorage.setItem(
     "lifetimeCoins",
@@ -527,8 +644,7 @@ localStorage.setItem(
 );
 
 createFloatingText(
-    "+5 Coins",
-    15
+    `+${xpReward} XP | +${coinReward} Coins`
 );
 
 coinsDisplay.textContent =
@@ -807,10 +923,23 @@ statsBtn.addEventListener("click", () => {
     ).textContent = lifetimeCoins;
 
     document.getElementById(
-        "highestLevelStat"
-    ).textContent = level;
+    "highestLevelStat"
+).textContent = level;
 
-    statsScreen.hidden = false;
+document.getElementById(
+    "highScore"
+).textContent = highScore;
+
+document.getElementById(
+    "accuracy"
+).textContent =
+    accuracyDisplay.textContent;
+
+document.getElementById(
+    "misses"
+).textContent = misses;
+
+statsScreen.hidden = false;
 });
 
 closeStats.addEventListener("click", () => {
@@ -822,3 +951,28 @@ difficultySelect.addEventListener(
     "change",
     applyDifficulty
 );
+
+setInterval(() => {
+
+    if(gameOver || gamePaused)
+        return;
+
+    const roll =
+        Math.random();
+
+    if(roll < 0.33){
+
+        showPowerup("xp");
+    }
+
+    else if(roll < 0.66){
+
+        showPowerup("coins");
+    }
+
+    else{
+
+        showPowerup("slow");
+    }
+
+}, 20000);
