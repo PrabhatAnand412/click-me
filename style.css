@@ -776,3 +776,46 @@ h1 {
     transform: translate(-50%, -60%) scale(1);
   }
 }
+#pauseMenu {
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.92);
+
+  z-index: 2000;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 15px;
+}
+
+#pauseMenu[hidden] {
+  display: none !important;
+}
+
+#pauseMenu h2 {
+  font-size: 3rem;
+
+  margin-bottom: 20px;
+}
+
+#pauseMenu button {
+  width: 220px;
+
+  padding: 12px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  font-size: 1rem;
+}

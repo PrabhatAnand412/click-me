@@ -7,35 +7,26 @@ const timerDisplay = document.getElementById("timer");
 const message = document.getElementById("message");
 const fakeContainer = document.getElementById("fakeContainer");
 const mainMenu = document.getElementById("mainMenu");
-
+const pauseMenu = document.getElementById("pauseMenu");
+const resumeBtn = document.getElementById("resumeBtn");
+const pauseStatsBtn = document.getElementById("pauseStatsBtn");
+const pauseShopBtn = document.getElementById("pauseShopBtn");
+const pauseMainMenuBtn = document.getElementById("pauseMainMenuBtn");
 const playBtn = document.getElementById("playBtn");
-
 const menuStatsBtn = document.getElementById("menuStatsBtn");
-
 const menuShopBtn = document.getElementById("menuShopBtn");
-
 const layout = document.getElementById("layout");
 const gameArena = document.getElementById("gameArena");
 const difficultySelect = document.getElementById("difficultySelect");
-
 const shopBtn = document.getElementById("shopBtn");
-
 const shop = document.getElementById("shop");
-
 const closeShop = document.getElementById("closeShop");
-
 const statsBtn = document.getElementById("statsBtn");
-
 const statsScreen = document.getElementById("statsScreen");
-
 const closeStats = document.getElementById("closeStats");
-
 const levelDisplay = document.getElementById("level");
-
 const coinsDisplay = document.getElementById("coins");
-
 const xpFill = document.getElementById("xpFill");
-
 const powerupStatus = document.getElementById("powerupStatus");
 
 let score = 0;
@@ -55,48 +46,36 @@ let runCoins = 0;
 let runXP = 0;
 let comboTimer;
 let fakeButtonsCreated = false;
+
 const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
 let dangerDistance = isTouchDevice ? 20 : 35;
-
 let currentDifficulty = "normal";
 let xpReward = 20;
 let coinReward = 5;
 let doubleXP = false;
-
 let doubleCoins = false;
-
 let slowButton = false;
-
 let doubleXPTime = 0;
-
 let doubleCoinsTime = 0;
-
 let slowButtonTime = 0;
-
 let freezeButton = false;
-
 let freezeButtonTime = 0;
-
 let gameOver = false;
 let gamePaused = false;
-
 let highScore = parseInt(localStorage.getItem("highScore")) || 0;
-
 let gamesPlayed = parseInt(localStorage.getItem("gamesPlayed")) || 0;
-
+let openedFromPause = false;
 let lifetimeClicks = parseInt(localStorage.getItem("lifetimeClicks")) || 0;
-
 let lifetimeCoins = parseInt(localStorage.getItem("lifetimeCoins")) || 0;
 let ownedSkins = JSON.parse(localStorage.getItem("ownedSkins")) || ["default"];
-
 let selectedSkin = localStorage.getItem("selectedSkin") || "default";
+
 const savedSkin = localStorage.getItem("skin");
 
 let ownedThemes = JSON.parse(localStorage.getItem("ownedThemes")) || [
   "default",
 ];
-
 let selectedTheme = localStorage.getItem("selectedTheme") || "default";
 
 highScoreDisplay.textContent = highScore;
@@ -808,6 +787,14 @@ shopBtn.addEventListener("click", () => {
 closeShop.addEventListener("click", () => {
   shop.hidden = true;
 
+  if (openedFromPause) {
+    pauseMenu.hidden = false;
+
+    openedFromPause = false;
+
+    return;
+  }
+
   if (layout.hidden) {
     mainMenu.hidden = false;
   }
@@ -927,6 +914,14 @@ statsBtn.addEventListener("click", () => {
 
 closeStats.addEventListener("click", () => {
   statsScreen.hidden = true;
+
+  if (openedFromPause) {
+    pauseMenu.hidden = false;
+
+    openedFromPause = false;
+
+    return;
+  }
 
   if (layout.hidden) {
     mainMenu.hidden = false;
@@ -1168,4 +1163,37 @@ defaultThemeBtn.addEventListener("click", () => {
   localStorage.setItem("selectedTheme", selectedTheme);
 
   updateThemeUI();
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+
+  if (gameOver) return;
+
+  gamePaused = !gamePaused;
+
+  pauseMenu.hidden = !gamePaused;
+});
+
+resumeBtn.addEventListener("click", () => {
+  gamePaused = false;
+
+  pauseMenu.hidden = true;
+});
+pauseShopBtn.addEventListener("click", () => {
+  openedFromPause = true;
+
+  pauseMenu.hidden = true;
+
+  shop.hidden = false;
+});
+pauseStatsBtn.addEventListener("click", () => {
+  openedFromPause = true;
+
+  pauseMenu.hidden = true;
+
+  statsScreen.hidden = false;
+});
+pauseMainMenuBtn.addEventListener("click", () => {
+  location.reload();
 });
