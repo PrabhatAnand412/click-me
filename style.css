@@ -717,3 +717,14 @@ h1 {
 
   font-size: 1rem;
 }
+#gameOverScreen p {
+  font-size: 1.2rem;
+
+  margin: 6px 0;
+}
+
+#gameOverScreen h1 {
+  color: gold;
+
+  text-shadow: 0 0 25px gold;
+}

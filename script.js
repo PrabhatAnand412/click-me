@@ -50,6 +50,9 @@ let coins = parseInt(localStorage.getItem("coins")) || 0;
 
 const xpNeeded = 100;
 let combo = 0;
+let bestCombo = 0;
+let runCoins = 0;
+let runXP = 0;
 let comboTimer;
 let fakeButtonsCreated = false;
 const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
@@ -196,6 +199,7 @@ function updateAccuracy() {
 }
 
 function addXP(amount) {
+  runXP += amount;
   xp += amount;
 
   if (xp > xpNeeded) xp = xpNeeded;
@@ -467,6 +471,8 @@ button.addEventListener("touchstart", (e) => {
 
   coins += doubleCoins ? coinReward * 2 : coinReward;
 
+  runCoins += doubleCoins ? coinReward * 2 : coinReward;
+
   lifetimeCoins += doubleCoins ? coinReward * 2 : coinReward;
 
   localStorage.setItem("lifetimeCoins", lifetimeCoins);
@@ -521,6 +527,10 @@ button.addEventListener("click", () => {
 
   combo++;
 
+  if (combo > bestCombo) {
+    bestCombo = combo;
+  }
+
   clearTimeout(comboTimer);
 
   comboTimer = setTimeout(() => {
@@ -540,6 +550,8 @@ button.addEventListener("click", () => {
   addXP(doubleXP ? xpReward * 2 : xpReward);
 
   coins += doubleCoins ? coinReward * 2 : coinReward;
+
+  runCoins += doubleCoins ? coinReward * 2 : coinReward;
 
   lifetimeCoins += doubleCoins ? coinReward * 2 : coinReward;
 
@@ -614,6 +626,16 @@ function showGameOver() {
   document.getElementById("finalScore").textContent = score;
 
   document.getElementById("finalMisses").textContent = misses;
+
+  document.getElementById("finalCombo").textContent = bestCombo;
+
+  document.getElementById("finalCoins").textContent = runCoins;
+
+  document.getElementById("finalXP").textContent = runXP;
+
+  document.getElementById("finalLevel").textContent = level;
+
+  document.getElementById("finalHighScore").textContent = highScore;
 }
 
 let timeLeft = 60;
