@@ -728,3 +728,51 @@ h1 {
 
   text-shadow: 0 0 25px gold;
 }
+
+#powerupAnnouncement {
+  position: fixed;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  font-size: 3rem;
+
+  font-weight: bold;
+
+  text-align: center;
+
+  color: white;
+
+  text-shadow:
+    0 0 20px white,
+    0 0 40px white;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  z-index: 5000;
+}
+
+#powerupAnnouncement.show {
+  animation: powerupPop 1s ease;
+}
+
+@keyframes powerupPop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -40%) scale(0.7);
+  }
+
+  25% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -60%) scale(1);
+  }
+}

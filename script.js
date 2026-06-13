@@ -248,6 +248,12 @@ function createFloatingText(text, offset = 0) {
     popup.style.color = "#facc15";
   }
 
+  if (text.includes("Combo")) {
+    popup.style.color = "#f97316";
+
+    popup.style.fontSize = "1.2rem";
+  }
+
   popup.textContent = text;
 
   const rect = button.getBoundingClientRect();
@@ -261,6 +267,18 @@ function createFloatingText(text, offset = 0) {
   setTimeout(() => {
     popup.remove();
   }, 800);
+}
+
+function announcePowerup(text) {
+  const popup = document.getElementById("powerupAnnouncement");
+
+  popup.textContent = text;
+
+  popup.classList.remove("show");
+
+  void popup.offsetWidth;
+
+  popup.classList.add("show");
 }
 
 function teleportButton() {
@@ -345,6 +363,8 @@ function activatePowerup(type) {
 
     message.textContent = "⭐ Double XP";
 
+    announcePowerup("⭐ DOUBLE XP");
+
     setTimeout(() => {
       doubleXP = false;
 
@@ -359,6 +379,8 @@ function activatePowerup(type) {
     updatePowerupStatus();
 
     message.textContent = "🪙 Double Coins";
+
+    announcePowerup("🪙 DOUBLE COINS");
 
     setTimeout(() => {
       doubleCoins = false;
@@ -375,6 +397,8 @@ function activatePowerup(type) {
 
     message.textContent = "⚡ Slow Button";
 
+    announcePowerup("⚡ SLOW BUTTON");
+
     setTimeout(() => {
       slowButton = false;
 
@@ -390,6 +414,8 @@ function activatePowerup(type) {
     updatePowerupStatus();
 
     message.textContent = "🧊 Freeze Button";
+
+    announcePowerup("🧊 FREEZE BUTTON");
 
     setTimeout(() => {
       freezeButton = false;
@@ -526,6 +552,10 @@ button.addEventListener("click", () => {
   if (gameOver) return;
 
   combo++;
+
+  if (combo > 1) {
+    createFloatingText(`🔥 Combo x${combo}`, -30);
+  }
 
   if (combo > bestCombo) {
     bestCombo = combo;
