@@ -819,3 +819,46 @@ h1 {
 
   font-size: 1rem;
 }
+#settingsScreen {
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(5, 10, 25, 0.95);
+
+  z-index: 1600;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 18px;
+}
+
+#settingsScreen[hidden] {
+  display: none !important;
+}
+
+#settingsScreen label {
+  font-size: 1.1rem;
+
+  display: flex;
+
+  gap: 10px;
+
+  align-items: center;
+}
+
+#settingsScreen button {
+  padding: 12px 25px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+}

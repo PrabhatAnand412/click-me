@@ -11,6 +11,7 @@ const pauseMenu = document.getElementById("pauseMenu");
 const resumeBtn = document.getElementById("resumeBtn");
 const pauseStatsBtn = document.getElementById("pauseStatsBtn");
 const pauseShopBtn = document.getElementById("pauseShopBtn");
+const pauseSettingsBtn = document.getElementById("pauseSettingsBtn");
 const pauseMainMenuBtn = document.getElementById("pauseMainMenuBtn");
 const playBtn = document.getElementById("playBtn");
 const menuStatsBtn = document.getElementById("menuStatsBtn");
@@ -28,6 +29,14 @@ const levelDisplay = document.getElementById("level");
 const coinsDisplay = document.getElementById("coins");
 const xpFill = document.getElementById("xpFill");
 const powerupStatus = document.getElementById("powerupStatus");
+const menuSettingsBtn = document.getElementById("menuSettingsBtn");
+const settingsScreen = document.getElementById("settingsScreen");
+const closeSettings = document.getElementById("closeSettings");
+const animationsToggle = document.getElementById("animationsToggle");
+const floatingTextToggle = document.getElementById("floatingTextToggle");
+const achievementToggle = document.getElementById("achievementToggle");
+const powerupToggle = document.getElementById("powerupToggle");
+const resetProgressBtn = document.getElementById("resetProgressBtn");
 
 let score = 0;
 let misses = 0;
@@ -63,6 +72,14 @@ let freezeButton = false;
 let freezeButtonTime = 0;
 let gameOver = false;
 let gamePaused = false;
+let animationsEnabled = localStorage.getItem("animationsEnabled") !== "false";
+
+let floatingTextEnabled =
+  localStorage.getItem("floatingTextEnabled") !== "false";
+
+let achievementEnabled = localStorage.getItem("achievementEnabled") !== "false";
+
+let powerupEnabled = localStorage.getItem("powerupEnabled") !== "false";
 let highScore = parseInt(localStorage.getItem("highScore")) || 0;
 let gamesPlayed = parseInt(localStorage.getItem("gamesPlayed")) || 0;
 let openedFromPause = false;
@@ -693,6 +710,13 @@ window.addEventListener("load", () => {
   button.style.left = (arenaRect.width - rect.width) / 2 + "px";
 
   button.style.top = (arenaRect.height - rect.height) / 2 + "px";
+  animationsToggle.checked = animationsEnabled;
+
+  floatingTextToggle.checked = floatingTextEnabled;
+
+  achievementToggle.checked = achievementEnabled;
+
+  powerupToggle.checked = powerupEnabled;
 });
 
 window.addEventListener("resize", () => {
@@ -1196,4 +1220,60 @@ pauseStatsBtn.addEventListener("click", () => {
 });
 pauseMainMenuBtn.addEventListener("click", () => {
   location.reload();
+});
+menuSettingsBtn.addEventListener("click", () => {
+  mainMenu.hidden = true;
+
+  settingsScreen.hidden = false;
+});
+
+closeSettings.addEventListener("click", () => {
+  settingsScreen.hidden = true;
+
+  if (openedFromPause) {
+    pauseMenu.hidden = false;
+
+    openedFromPause = false;
+
+    return;
+  }
+
+  mainMenu.hidden = false;
+});
+animationsToggle.addEventListener("change", () => {
+  animationsEnabled = animationsToggle.checked;
+
+  localStorage.setItem("animationsEnabled", animationsEnabled);
+});
+
+floatingTextToggle.addEventListener("change", () => {
+  floatingTextEnabled = floatingTextToggle.checked;
+
+  localStorage.setItem("floatingTextEnabled", floatingTextEnabled);
+});
+
+achievementToggle.addEventListener("change", () => {
+  achievementEnabled = achievementToggle.checked;
+
+  localStorage.setItem("achievementEnabled", achievementEnabled);
+});
+
+powerupToggle.addEventListener("change", () => {
+  powerupEnabled = powerupToggle.checked;
+
+  localStorage.setItem("powerupEnabled", powerupEnabled);
+});
+resetProgressBtn.addEventListener("click", () => {
+  if (!confirm("Reset all progress?")) return;
+
+  localStorage.clear();
+
+  location.reload();
+});
+pauseSettingsBtn.addEventListener("click", () => {
+  openedFromPause = true;
+
+  pauseMenu.hidden = true;
+
+  settingsScreen.hidden = false;
 });
