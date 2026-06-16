@@ -35,6 +35,11 @@ const floatingTextToggle = document.getElementById("floatingTextToggle");
 const achievementToggle = document.getElementById("achievementToggle");
 const powerupToggle = document.getElementById("powerupToggle");
 const resetProgressBtn = document.getElementById("resetProgressBtn");
+const statsBestCombo = document.getElementById("statsBestCombo");
+const statsAchievements = document.getElementById("statsAchievements");
+const statsSkins = document.getElementById("statsSkins");
+const statsThemes = document.getElementById("statsThemes");
+
 let tauntCooldown = false;
 let score = 0;
 let misses = 0;
@@ -106,6 +111,8 @@ if (savedSkin) {
 
 const achievements = [];
 
+const totalAchievements = 12;
+
 const taunts = [
   "Too slow!",
   "Nice try!",
@@ -162,6 +169,8 @@ function unlockAchievement(name) {
 
   achievements.push(name);
 
+  updateStatistics();
+
   if (!achievementEnabled) return;
 
   const popup = document.getElementById("achievementPopup");
@@ -182,11 +191,19 @@ function updateAccuracy() {
   accuracyDisplay.textContent = accuracy;
 }
 
+function updateStatistics() {
+  statsBestCombo.textContent = bestCombo;
+
+  statsAchievements.textContent = `${achievements.length}/${totalAchievements}`;
+
+  statsSkins.textContent = ownedSkins.length;
+
+  statsThemes.textContent = ownedThemes.length;
+}
+
 function addXP(amount) {
   runXP += amount;
   xp += amount;
-
-  if (xp > xpNeeded) xp = xpNeeded;
 
   xpFill.style.width = (xp / xpNeeded) * 100 + "%";
 
@@ -198,6 +215,10 @@ function addXP(amount) {
     levelDisplay.textContent = level;
 
     localStorage.setItem("level", level);
+
+    if (level >= 10) {
+      unlockAchievement("Survivor");
+    }
 
     if (level > highestLevel) {
       highestLevel = level;
@@ -268,6 +289,17 @@ function announcePowerup(text) {
 
   popup.classList.add("show");
 }
+
+function showHighScoreCelebration() {
+  const popup = document.getElementById("highScorePopup");
+
+  popup.classList.remove("show");
+
+  void popup.offsetWidth;
+
+  popup.classList.add("show");
+}
+
 function showTaunt(text) {
   const popup = document.getElementById("powerupAnnouncement");
 
@@ -506,6 +538,14 @@ button.addEventListener("touchstart", (e) => {
 
   lifetimeCoins += doubleCoins ? coinReward * 2 : coinReward;
 
+  if (coins >= 1000) {
+    unlockAchievement("Rich");
+  }
+
+  if (coins >= 5000) {
+    unlockAchievement("Millionaire");
+  }
+
   localStorage.setItem("lifetimeCoins", lifetimeCoins);
 
   coinsDisplay.textContent = coins;
@@ -523,11 +563,17 @@ button.addEventListener("touchstart", (e) => {
   message.textContent = `You got me! Score: ${score}`;
 
   if (score > highScore) {
+    const newRecord = score === highScore + 1;
+
     highScore = score;
 
     localStorage.setItem("highScore", highScore);
 
     highScoreDisplay.textContent = highScore;
+
+    if (newRecord) {
+      showHighScoreCelebration();
+    }
   }
 
   setTimeout(
@@ -566,6 +612,30 @@ button.addEventListener("click", () => {
     bestCombo = combo;
   }
 
+  if (bestCombo >= 10) {
+    unlockAchievement("Combo Master");
+  }
+
+  if (bestCombo >= 10) {
+    unlockAchievement("Combo Master");
+  }
+
+  if (bestCombo >= 25) {
+    unlockAchievement("Combo Legend");
+  }
+
+  if (combo > bestCombo) {
+    bestCombo = combo;
+  }
+
+  if (bestCombo >= 10) {
+    unlockAchievement("Combo Master");
+  }
+
+  if (bestCombo >= 25) {
+    unlockAchievement("Combo Legend");
+  }
+
   clearTimeout(comboTimer);
 
   comboTimer = setTimeout(() => {
@@ -589,6 +659,14 @@ button.addEventListener("click", () => {
   runCoins += doubleCoins ? coinReward * 2 : coinReward;
 
   lifetimeCoins += doubleCoins ? coinReward * 2 : coinReward;
+
+  if (coins >= 1000) {
+    unlockAchievement("Rich");
+  }
+
+  if (coins >= 5000) {
+    unlockAchievement("Millionaire");
+  }
 
   localStorage.setItem("lifetimeCoins", lifetimeCoins);
 
@@ -656,6 +734,10 @@ function showGameOver() {
 
   localStorage.setItem("gamesPlayed", gamesPlayed);
 
+  if (gamesPlayed >= 25) {
+    unlockAchievement("Veteran");
+  }
+
   screen.removeAttribute("hidden");
 
   document.getElementById("finalScore").textContent = score;
@@ -709,6 +791,7 @@ window.addEventListener("load", () => {
   updateShopUI();
   applyTheme(selectedTheme);
   updateThemeUI();
+  updateStatistics();
 
   timerDisplay.textContent = timeLeft;
 
@@ -784,6 +867,10 @@ function updateShopUI() {
       ? "Selected"
       : "Owned"
     : "Buy";
+
+  if (ownedSkins.length >= 3) {
+    unlockAchievement("Collector");
+  }
 }
 
 function updateThemeUI() {
@@ -813,6 +900,10 @@ function updateThemeUI() {
 
   defaultThemeBtn.textContent =
     selectedTheme === "default" ? "Selected" : "Owned";
+
+  if (ownedThemes.length >= 3) {
+    unlockAchievement("Theme Collector");
+  }
 }
 
 closeShop.addEventListener("click", () => {
@@ -859,6 +950,7 @@ blueSkinBtn.addEventListener("click", () => {
   localStorage.setItem("skin", "#3b82f6");
 
   updateShopUI();
+  updateStatistics();
 });
 
 goldSkinBtn.addEventListener("click", () => {
@@ -889,6 +981,7 @@ goldSkinBtn.addEventListener("click", () => {
   localStorage.setItem("skin", "gold");
 
   updateShopUI();
+  updateStatistics();
 });
 rainbowSkinBtn.addEventListener("click", () => {
   if (ownedSkins.includes("rainbow")) {
@@ -923,6 +1016,7 @@ rainbowSkinBtn.addEventListener("click", () => {
   );
 
   updateShopUI();
+  updateStatistics();
 });
 
 closeStats.addEventListener("click", () => {
@@ -1081,6 +1175,7 @@ spaceThemeBtn.addEventListener("click", () => {
   localStorage.setItem("ownedThemes", JSON.stringify(ownedThemes));
 
   updateThemeUI();
+  updateStatistics();
 });
 
 oceanThemeBtn.addEventListener("click", () => {
@@ -1137,6 +1232,7 @@ lavaThemeBtn.addEventListener("click", () => {
   localStorage.setItem("ownedThemes", JSON.stringify(ownedThemes));
 
   updateThemeUI();
+  updateStatistics();
 });
 
 forestThemeBtn.addEventListener("click", () => {
@@ -1165,6 +1261,7 @@ forestThemeBtn.addEventListener("click", () => {
   localStorage.setItem("ownedThemes", JSON.stringify(ownedThemes));
 
   updateThemeUI();
+  updateStatistics();
 });
 
 defaultThemeBtn.addEventListener("click", () => {
@@ -1175,6 +1272,7 @@ defaultThemeBtn.addEventListener("click", () => {
   localStorage.setItem("selectedTheme", selectedTheme);
 
   updateThemeUI();
+  updateStatistics();
 });
 
 document.addEventListener("keydown", (e) => {
