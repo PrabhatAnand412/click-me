@@ -12,17 +12,15 @@ const resumeBtn = document.getElementById("resumeBtn");
 const pauseStatsBtn = document.getElementById("pauseStatsBtn");
 const pauseShopBtn = document.getElementById("pauseShopBtn");
 const pauseSettingsBtn = document.getElementById("pauseSettingsBtn");
+const pauseDifficultySelect = document.getElementById("pauseDifficultySelect");
 const pauseMainMenuBtn = document.getElementById("pauseMainMenuBtn");
 const playBtn = document.getElementById("playBtn");
 const menuStatsBtn = document.getElementById("menuStatsBtn");
 const menuShopBtn = document.getElementById("menuShopBtn");
 const layout = document.getElementById("layout");
 const gameArena = document.getElementById("gameArena");
-const difficultySelect = document.getElementById("difficultySelect");
-const shopBtn = document.getElementById("shopBtn");
 const shop = document.getElementById("shop");
 const closeShop = document.getElementById("closeShop");
-const statsBtn = document.getElementById("statsBtn");
 const statsScreen = document.getElementById("statsScreen");
 const closeStats = document.getElementById("closeStats");
 const levelDisplay = document.getElementById("level");
@@ -37,7 +35,7 @@ const floatingTextToggle = document.getElementById("floatingTextToggle");
 const achievementToggle = document.getElementById("achievementToggle");
 const powerupToggle = document.getElementById("powerupToggle");
 const resetProgressBtn = document.getElementById("resetProgressBtn");
-
+let tauntCooldown = false;
 let score = 0;
 let misses = 0;
 let totalAttempts = 0;
@@ -122,59 +120,49 @@ const taunts = [
 ];
 
 function randomTaunt() {
+  if (tauntCooldown) return;
+
+  tauntCooldown = true;
+
   const index = Math.floor(Math.random() * taunts.length);
 
-  message.textContent = taunts[index];
-}
+  const taunt = taunts[index];
 
+  message.textContent = taunt;
+
+  showTaunt(taunt);
+
+  setTimeout(() => {
+    tauntCooldown = false;
+  }, 1500);
+}
 function applyDifficulty() {
-  currentDifficulty = difficultySelect.value;
+  localStorage.setItem("difficulty", currentDifficulty);
 
   switch (currentDifficulty) {
     case "easy":
-      dangerDistance = 20;
-
-      xpReward = 15;
-
-      coinReward = 3;
-
-      break;
-
-    case "normal":
-      dangerDistance = 35;
-
-      xpReward = 20;
-
-      coinReward = 5;
-
+      gameSpeed = 0.7;
       break;
 
     case "hard":
-      dangerDistance = 60;
-
-      xpReward = 30;
-
-      coinReward = 8;
-
+      gameSpeed = 1.3;
       break;
 
     case "nightmare":
-      dangerDistance = 100;
-
-      xpReward = 50;
-
-      coinReward = 15;
-
+      gameSpeed = 1.7;
       break;
-  }
 
-  message.textContent = `Difficulty: ${currentDifficulty}`;
+    default:
+      gameSpeed = 1;
+  }
 }
 
 function unlockAchievement(name) {
   if (achievements.includes(name)) return;
 
   achievements.push(name);
+
+  if (!achievementEnabled) return;
 
   const popup = document.getElementById("achievementPopup");
 
@@ -236,6 +224,8 @@ function addXP(amount) {
 }
 
 function createFloatingText(text, offset = 0) {
+  if (!floatingTextEnabled) return;
+
   const popup = document.createElement("div");
 
   popup.className = "floatingText";
@@ -266,6 +256,8 @@ function createFloatingText(text, offset = 0) {
 }
 
 function announcePowerup(text) {
+  if (!powerupEnabled) return;
+
   const popup = document.getElementById("powerupAnnouncement");
 
   popup.textContent = text;
@@ -275,6 +267,23 @@ function announcePowerup(text) {
   void popup.offsetWidth;
 
   popup.classList.add("show");
+}
+function showTaunt(text) {
+  const popup = document.getElementById("powerupAnnouncement");
+
+  popup.textContent = text;
+
+  popup.style.color = "#f97316";
+
+  popup.classList.remove("show");
+
+  void popup.offsetWidth;
+
+  popup.classList.add("show");
+
+  setTimeout(() => {
+    popup.style.color = "white";
+  }, 1000);
 }
 
 function teleportButton() {
@@ -717,6 +726,8 @@ window.addEventListener("load", () => {
   achievementToggle.checked = achievementEnabled;
 
   powerupToggle.checked = powerupEnabled;
+
+  pauseDifficultySelect.value = currentDifficulty;
 });
 
 window.addEventListener("resize", () => {
@@ -803,10 +814,6 @@ function updateThemeUI() {
   defaultThemeBtn.textContent =
     selectedTheme === "default" ? "Selected" : "Owned";
 }
-
-shopBtn.addEventListener("click", () => {
-  shop.hidden = false;
-});
 
 closeShop.addEventListener("click", () => {
   shop.hidden = true;
@@ -918,24 +925,6 @@ rainbowSkinBtn.addEventListener("click", () => {
   updateShopUI();
 });
 
-statsBtn.addEventListener("click", () => {
-  document.getElementById("gamesPlayedStat").textContent = gamesPlayed;
-
-  document.getElementById("lifetimeClicksStat").textContent = lifetimeClicks;
-
-  document.getElementById("lifetimeCoinsStat").textContent = lifetimeCoins;
-
-  document.getElementById("highestLevelStat").textContent = highestLevel;
-
-  document.getElementById("highScore").textContent = highScore;
-
-  document.getElementById("accuracy").textContent = accuracyDisplay.textContent;
-
-  document.getElementById("misses").textContent = misses;
-
-  statsScreen.hidden = false;
-});
-
 closeStats.addEventListener("click", () => {
   statsScreen.hidden = true;
 
@@ -951,7 +940,6 @@ closeStats.addEventListener("click", () => {
     mainMenu.hidden = false;
   }
 });
-difficultySelect.addEventListener("change", applyDifficulty);
 
 setInterval(() => {
   if (gameOver || gamePaused) return;
@@ -1276,4 +1264,9 @@ pauseSettingsBtn.addEventListener("click", () => {
   pauseMenu.hidden = true;
 
   settingsScreen.hidden = false;
+});
+pauseDifficultySelect.addEventListener("change", () => {
+  currentDifficulty = pauseDifficultySelect.value;
+
+  applyDifficulty();
 });
