@@ -188,6 +188,16 @@ h1 {
   right: 20px;
 }
 
+#achievementReward {
+  margin-top: 8px;
+
+  color: gold;
+
+  font-weight: bold;
+
+  font-size: 1.1rem;
+}
+
 /* Game Over Screen */
 
 #gameOverScreen {
@@ -477,6 +487,7 @@ h1 {
 
   #gameArena {
     margin: 10px;
+    position: relative;
   }
 }
 
@@ -851,4 +862,56 @@ h1 {
 .statsCard::-webkit-scrollbar-thumb {
   background: rgba(0, 255, 255, 0.4);
   border-radius: 10px;
+}
+#achievementList {
+  margin-top: 15px;
+}
+
+.achievementItem {
+  text-align: left;
+
+  padding: 8px 0;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+#dailyRewardPopup {
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.8);
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  z-index: 10000;
+}
+
+#dailyRewardPopup[hidden] {
+  display: none;
+}
+
+.rewardCard {
+  background: #1e293b;
+
+  padding: 30px;
+
+  border-radius: 20px;
+
+  width: 320px;
+
+  text-align: center;
+
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+}
+
+.rewardCard h2 {
+  margin-top: 0;
+}
+
+.rewardCard button {
+  margin-top: 15px;
 }

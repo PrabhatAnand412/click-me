@@ -17,6 +17,17 @@
           High Score: <span id="menuHighScoreValue">0</span>
         </div>
 
+        <label class="pauseDifficultyLabel">
+          Difficulty
+
+          <select id="menuDifficultySelect">
+            <option value="easy">Easy</option>
+            <option value="normal" selected>Normal</option>
+            <option value="hard">Hard</option>
+            <option value="nightmare">Nightmare</option>
+          </select>
+        </label>
+
         <button id="playBtn">▶ Play</button>
 
         <button id="menuStatsBtn">📊 Statistics</button>
@@ -57,17 +68,14 @@
           <div id="xpFill"></div>
         </div>
 
-        <h3 id="message">Catch the button if you can!</h3>
-
         <div class="sidebarCard" id="powerupStatus">No Active Powerups</div>
       </aside>
 
       <!-- Arena -->
 
       <main id="gameArena">
+        <div id="tauntBox"></div>
         <button id="runawayBtn">Click Me!</button>
-
-        <div id="fakeContainer"></div>
       </main>
     </div>
 
@@ -78,9 +86,21 @@
       <h3>🏆 Achievement Unlocked</h3>
 
       <p id="achievementText"></p>
+
+      <p id="achievementReward"></p>
     </div>
 
     <div id="highScorePopup">🔥 NEW HIGH SCORE!</div>
+
+    <div id="dailyRewardPopup" hidden>
+      <div class="rewardCard">
+        <h2>🎁 Daily Reward</h2>
+
+        <p id="dailyRewardText">+50 Coins</p>
+
+        <button id="claimRewardBtn">Claim</button>
+      </div>
+    </div>
 
     <!-- Statistics -->
 
@@ -142,6 +162,10 @@
           Themes Owned:
           <span id="statsThemes">0</span>
         </p>
+
+        <h3>🏆 Achievements</h3>
+
+        <div id="achievementList"></div>
 
         <button id="closeStats">Close</button>
       </div>

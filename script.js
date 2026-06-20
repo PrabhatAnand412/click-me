@@ -1,11 +1,11 @@
 const button = document.getElementById("runawayBtn");
 const scoreDisplay = document.getElementById("score");
+const menuDifficultySelect = document.getElementById("menuDifficultySelect");
 const missesDisplay = document.getElementById("misses");
 const accuracyDisplay = document.getElementById("accuracy");
 const highScoreDisplay = document.getElementById("highScore");
 const timerDisplay = document.getElementById("timer");
-const message = document.getElementById("message");
-const fakeContainer = document.getElementById("fakeContainer");
+const message = document.getElementById("tauntBox");
 const mainMenu = document.getElementById("mainMenu");
 const pauseMenu = document.getElementById("pauseMenu");
 const resumeBtn = document.getElementById("resumeBtn");
@@ -21,6 +21,9 @@ const layout = document.getElementById("layout");
 const gameArena = document.getElementById("gameArena");
 const shop = document.getElementById("shop");
 const closeShop = document.getElementById("closeShop");
+const dailyRewardPopup = document.getElementById("dailyRewardPopup");
+const dailyRewardText = document.getElementById("dailyRewardText");
+const claimRewardBtn = document.getElementById("claimRewardBtn");
 const statsScreen = document.getElementById("statsScreen");
 const closeStats = document.getElementById("closeStats");
 const levelDisplay = document.getElementById("level");
@@ -37,6 +40,8 @@ const powerupToggle = document.getElementById("powerupToggle");
 const resetProgressBtn = document.getElementById("resetProgressBtn");
 const statsBestCombo = document.getElementById("statsBestCombo");
 const statsAchievements = document.getElementById("statsAchievements");
+const achievementList = document.getElementById("achievementList");
+const achievementRewardText = document.getElementById("achievementReward");
 const statsSkins = document.getElementById("statsSkins");
 const statsThemes = document.getElementById("statsThemes");
 
@@ -51,18 +56,22 @@ let highestLevel = parseInt(localStorage.getItem("highestLevel")) || 1;
 
 let coins = parseInt(localStorage.getItem("coins")) || 0;
 
+const rewardTable = [50, 100, 150, 200, 250, 300, 500];
+
 const xpNeeded = 100;
 let combo = 0;
 let bestCombo = 0;
 let runCoins = 0;
 let runXP = 0;
 let comboTimer;
-let fakeButtonsCreated = false;
 
 const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
 
 let dangerDistance = isTouchDevice ? 20 : 35;
-let currentDifficulty = "normal";
+let escapeDistance = 150;
+let gameTime = 60;
+let powerupSpawnRate = 20000;
+let currentDifficulty = localStorage.getItem("difficulty") || "normal";
 let xpReward = 20;
 let coinReward = 5;
 let doubleXP = false;
@@ -109,9 +118,28 @@ if (savedSkin) {
   }
 }
 
-const achievements = [];
+let achievements = JSON.parse(localStorage.getItem("achievements")) || [];
 
 const totalAchievements = 12;
+
+const allAchievements = [
+  "First Catch",
+  "Button Hunter",
+  "Persistence Pays Off",
+  "Professional Annoyer",
+
+  "Combo Master",
+  "Combo Legend",
+
+  "Rich",
+  "Millionaire",
+
+  "Collector",
+  "Theme Collector",
+
+  "Survivor",
+  "Veteran",
+];
 
 const taunts = [
   "Too slow!",
@@ -148,26 +176,78 @@ function applyDifficulty() {
 
   switch (currentDifficulty) {
     case "easy":
-      gameSpeed = 0.7;
+      escapeDistance = 100;
+      gameTime = 70;
+
+      xpReward = 25;
+      coinReward = 6;
+
       break;
 
     case "hard":
-      gameSpeed = 1.3;
+      escapeDistance = 200;
+      gameTime = 55;
+
+      xpReward = 20;
+      coinReward = 5;
+
       break;
 
     case "nightmare":
-      gameSpeed = 1.7;
+      escapeDistance = 250;
+      gameTime = 45;
+
+      xpReward = 30;
+      coinReward = 8;
+
       break;
 
     default:
-      gameSpeed = 1;
+      escapeDistance = 150;
+      gameTime = 60;
+
+      xpReward = 20;
+      coinReward = 5;
   }
 }
+
+const achievementRewards = {
+  "First Catch": 25,
+  "Button Hunter": 50,
+  "Persistence Pays Off": 75,
+  "Professional Annoyer": 100,
+
+  "Combo Master": 100,
+  "Combo Legend": 250,
+
+  Rich: 200,
+  Millionaire: 500,
+
+  Collector: 200,
+  "Theme Collector": 300,
+
+  Survivor: 250,
+  Veteran: 500,
+};
 
 function unlockAchievement(name) {
   if (achievements.includes(name)) return;
 
   achievements.push(name);
+
+  const reward = achievementRewards[name] || 0;
+
+  coins += reward;
+
+  lifetimeCoins += reward;
+
+  localStorage.setItem("lifetimeCoins", lifetimeCoins);
+
+  coinsDisplay.textContent = coins;
+
+  localStorage.setItem("coins", coins);
+
+  localStorage.setItem("achievements", JSON.stringify(achievements));
 
   updateStatistics();
 
@@ -176,6 +256,8 @@ function unlockAchievement(name) {
   const popup = document.getElementById("achievementPopup");
 
   document.getElementById("achievementText").textContent = name;
+
+  achievementRewardText.textContent = reward > 0 ? `+${reward} Coins` : "";
 
   popup.classList.add("show");
 
@@ -199,6 +281,60 @@ function updateStatistics() {
   statsSkins.textContent = ownedSkins.length;
 
   statsThemes.textContent = ownedThemes.length;
+
+  renderAchievements();
+}
+
+function checkDailyReward() {
+  const today = new Date().toDateString();
+
+  const lastClaim = localStorage.getItem("lastRewardDate");
+
+  let rewardDay = parseInt(localStorage.getItem("rewardDay")) || 0;
+
+  if (today === lastClaim) return;
+
+  const reward = rewardTable[rewardDay];
+
+  dailyRewardText.textContent = `Day ${rewardDay + 1}: +${reward} Coins`;
+
+  dailyRewardPopup.hidden = false;
+
+  claimRewardBtn.onclick = () => {
+    coins += reward;
+
+    lifetimeCoins += reward;
+
+    coinsDisplay.textContent = coins;
+
+    localStorage.setItem("coins", coins);
+
+    localStorage.setItem("lifetimeCoins", lifetimeCoins);
+
+    rewardDay = (rewardDay + 1) % rewardTable.length;
+
+    localStorage.setItem("rewardDay", rewardDay);
+
+    localStorage.setItem("lastRewardDate", today);
+
+    dailyRewardPopup.hidden = true;
+  };
+}
+
+function renderAchievements() {
+  achievementList.innerHTML = "";
+
+  allAchievements.forEach((achievement) => {
+    const unlocked = achievements.includes(achievement);
+
+    const item = document.createElement("div");
+
+    item.className = "achievementItem";
+
+    item.textContent = `${unlocked ? "✅" : "❌"} ${achievement}`;
+
+    achievementList.appendChild(item);
+  });
 }
 
 function addXP(amount) {
@@ -237,8 +373,6 @@ function addXP(amount) {
     localStorage.setItem("lifetimeCoins", lifetimeCoins);
 
     xpFill.style.width = "0%";
-
-    unlockAchievement(`Level ${level} Reached`);
 
     message.textContent = `⭐ Level ${level}!`;
   }
@@ -332,31 +466,6 @@ function teleportButton() {
   button.style.top = Math.random() * maxY + "px";
 
   randomTaunt();
-}
-
-function createFakeButtons() {
-  if (fakeButtonsCreated) return;
-
-  fakeButtonsCreated = true;
-
-  for (let i = 0; i < 3; i++) {
-    const fake = document.createElement("button");
-
-    fake.innerText = "Click Me!";
-    fake.className = "fakeButton";
-
-    const arenaRect = gameArena.getBoundingClientRect();
-
-    fake.style.left = Math.random() * (arenaRect.width - 150) + "px";
-
-    fake.style.top = Math.random() * (arenaRect.height - 150) + "px";
-
-    fake.addEventListener("click", () => {
-      message.textContent = "Wrong button 😂";
-    });
-
-    fakeContainer.appendChild(fake);
-  }
 }
 
 function showPowerup(type) {
@@ -498,11 +607,11 @@ document.addEventListener("mousemove", (e) => {
   const distance = Math.sqrt(dx * dx + dy * dy);
 
   if (distance < dangerDistance) {
-    const escapeDistance = slowButton ? 75 : 150;
+    const moveDistance = slowButton ? escapeDistance / 2 : escapeDistance;
 
-    let newX = button.offsetLeft - (dx / distance) * escapeDistance;
+    let newX = button.offsetLeft - (dx / distance) * moveDistance;
 
-    let newY = button.offsetTop - (dy / distance) * escapeDistance;
+    let newY = button.offsetTop - (dy / distance) * moveDistance;
 
     const arenaRect = gameArena.getBoundingClientRect();
 
@@ -616,22 +725,6 @@ button.addEventListener("click", () => {
     unlockAchievement("Combo Master");
   }
 
-  if (bestCombo >= 10) {
-    unlockAchievement("Combo Master");
-  }
-
-  if (bestCombo >= 25) {
-    unlockAchievement("Combo Legend");
-  }
-
-  if (combo > bestCombo) {
-    bestCombo = combo;
-  }
-
-  if (bestCombo >= 10) {
-    unlockAchievement("Combo Master");
-  }
-
   if (bestCombo >= 25) {
     unlockAchievement("Combo Legend");
   }
@@ -710,12 +803,6 @@ button.addEventListener("click", () => {
     message.textContent = "Level 3!";
   }
 
-  if (score === 10) {
-    createFakeButtons();
-
-    message.textContent = "Fake buttons unlocked!";
-  }
-
   if (score >= 20) {
     button.style.animation = "spin 1s linear infinite";
 
@@ -725,6 +812,14 @@ button.addEventListener("click", () => {
   setTimeout(() => {
     if (!gameOver) teleportButton();
   }, 200);
+});
+
+menuDifficultySelect.addEventListener("change", () => {
+  currentDifficulty = menuDifficultySelect.value;
+
+  pauseDifficultySelect.value = currentDifficulty;
+
+  applyDifficulty();
 });
 
 function showGameOver() {
@@ -755,7 +850,7 @@ function showGameOver() {
   document.getElementById("finalHighScore").textContent = highScore;
 }
 
-let timeLeft = 60;
+let timeLeft = gameTime;
 
 let timerStarted = false;
 
@@ -792,6 +887,8 @@ window.addEventListener("load", () => {
   applyTheme(selectedTheme);
   updateThemeUI();
   updateStatistics();
+  renderAchievements();
+  checkDailyReward();
 
   timerDisplay.textContent = timeLeft;
 
@@ -811,6 +908,8 @@ window.addEventListener("load", () => {
   powerupToggle.checked = powerupEnabled;
 
   pauseDifficultySelect.value = currentDifficulty;
+
+  menuDifficultySelect.value = currentDifficulty;
 });
 
 window.addEventListener("resize", () => {
@@ -1064,6 +1163,10 @@ setInterval(() => {
 }, 1000);
 
 playBtn.addEventListener("click", () => {
+  timeLeft = gameTime;
+
+  timerDisplay.textContent = timeLeft;
+
   mainMenu.hidden = true;
 
   layout.hidden = false;
@@ -1204,6 +1307,7 @@ oceanThemeBtn.addEventListener("click", () => {
   localStorage.setItem("ownedThemes", JSON.stringify(ownedThemes));
 
   updateThemeUI();
+  updateStatistics();
 });
 
 lavaThemeBtn.addEventListener("click", () => {
@@ -1365,6 +1469,8 @@ pauseSettingsBtn.addEventListener("click", () => {
 });
 pauseDifficultySelect.addEventListener("change", () => {
   currentDifficulty = pauseDifficultySelect.value;
+
+  menuDifficultySelect.value = currentDifficulty;
 
   applyDifficulty();
 });
