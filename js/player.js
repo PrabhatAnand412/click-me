@@ -1,0 +1,14 @@
+// Player scoring, combo, XP, and currency progression.
+import { state, config } from "./state.js";
+import { SaveManager as save } from "./save.js";
+import { el, renderHUD, setMessage, createFloatingText, showHighScoreCelebration } from "./ui.js";
+import { updateAccuracy } from "./statistics.js";
+import { unlockAchievement } from "./achievements.js";
+
+function persist(keys) { keys.forEach((key) => save.set(key, state[key])); }
+function checkCoinAchievements() { if (state.coins >= 1000) unlockAchievement("Rich"); if (state.coins >= 5000) unlockAchievement("Millionaire"); }
+export function addXP(amount) { state.runXP += amount; state.xp += amount; if (state.xp < config.xpNeeded) { renderHUD(); return; } state.xp = 0; state.level += 1; persist(["level"]); if (state.level >= 10) unlockAchievement("Survivor"); if (state.level > state.highestLevel) { state.highestLevel = state.level; persist(["highestLevel"]); } state.coins += 50; state.lifetimeCoins += 50; persist(["coins", "lifetimeCoins"]); renderHUD(); setMessage(`⭐ Level ${state.level}!`); }
+export function recordMiss() { state.misses += 1; state.totalAttempts += 1; renderHUD(); updateAccuracy(); }
+export function recordCatch({ touch = false } = {}) { if (touch) state.score += 1; else { state.combo += 1; if (state.combo > 1) createFloatingText(`🔥 Combo x${state.combo}`, -30); state.bestCombo = Math.max(state.bestCombo, state.combo); if (state.bestCombo >= 10) unlockAchievement("Combo Master"); if (state.bestCombo >= 25) unlockAchievement("Combo Legend"); clearTimeout(state.comboTimer); state.comboTimer = setTimeout(() => { state.combo = 0; }, 3000); state.score += state.combo; }
+  state.lifetimeClicks += 1; state.totalAttempts += 1; const xp = state.doubleXP ? state.xpReward * 2 : state.xpReward; const coins = state.doubleCoins ? state.coinReward * 2 : state.coinReward; addXP(xp); state.coins += coins; state.runCoins += coins; state.lifetimeCoins += coins; persist(["lifetimeClicks", "coins", "lifetimeCoins"]); checkCoinAchievements(); createFloatingText(`+${xp} XP | +${coins} Coins`); updateAccuracy(); setMessage(touch ? `You got me! Score: ${state.score}` : `🔥 Combo x${state.combo} | Score: ${state.score}`); if (!touch) { if (state.score === 1) unlockAchievement("First Catch"); if (state.score === 5) unlockAchievement("Button Hunter"); if (state.score === 10) unlockAchievement("Persistence Pays Off"); if (state.score === 25) unlockAchievement("Professional Annoyer"); if (state.score === 3) setMessage("Level 2 Unlocked!"); if (state.score === 6) { el.runawayBtn.style.scale = "0.9"; setMessage("Level 3!"); } if (state.score >= 20) { el.runawayBtn.style.animation = "spin 1s linear infinite"; el.runawayBtn.style.scale = "0.8"; } }
+  if (state.score > state.highScore) { state.highScore = state.score; persist(["highScore"]); showHighScoreCelebration(); } renderHUD(); return { xp, coins }; }

@@ -154,7 +154,18 @@ Catch-The-Button/
 │
 ├── index.html
 ├── style.css
-├── script.js
+├── js/
+│   ├── main.js
+│   ├── state.js
+│   ├── save.js
+│   ├── achievements.js
+│   ├── ui.js
+│   ├── powerups.js
+│   ├── game.js
+│   ├── shop.js
+│   ├── themes.js
+│   ├── player.js
+│   └── statistics.js
 └── README.md
 ```
 
