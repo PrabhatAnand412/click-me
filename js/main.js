@@ -8,7 +8,128 @@ import { applyTheme, initialiseThemes, updateThemeUI } from "./themes.js";
 import { initialiseDailyReward, refreshAchievementUI } from "./achievements.js";
 import { updatePowerupStatus, startPowerupTimers } from "./powerups.js";
 
-function initialiseSettings() { const toggles = [["floatingTextEnabled", el.floatingTextToggle], ["achievementEnabled", el.achievementToggle], ["powerupEnabled", el.powerupToggle]]; toggles.forEach(([key, control]) => { control.checked = state[key]; control.addEventListener("change", () => { state[key] = control.checked; save.set(key, state[key]); }); }); el.resetProgressBtn.addEventListener("click", () => { if (!confirm("Reset all progress?")) return; save.reset(); location.reload(); }); }
-function initialiseNavigation() { el.playBtn.addEventListener("click", () => { state.timeLeft = state.gameTime; renderHUD(); el.mainMenu.hidden = true; el.layout.hidden = false; startTimer(); }); el.menuStatsBtn.addEventListener("click", () => { el.mainMenu.hidden = true; el.statsScreen.hidden = false; }); el.closeStats.addEventListener("click", () => { el.statsScreen.hidden = true; if (state.openedFromPause) { el.pauseMenu.hidden = false; state.openedFromPause = false; } else if (el.layout.hidden) el.mainMenu.hidden = false; }); el.menuSettingsBtn.addEventListener("click", () => { el.mainMenu.hidden = true; el.settingsScreen.hidden = false; }); el.closeSettings.addEventListener("click", () => { el.settingsScreen.hidden = true; if (state.openedFromPause) { el.pauseMenu.hidden = false; state.openedFromPause = false; } else el.mainMenu.hidden = false; }); document.addEventListener("keydown", (event) => { if (event.key === "Escape" && !state.gameOver) { state.gamePaused = !state.gamePaused; el.pauseMenu.hidden = !state.gamePaused; } }); el.resumeBtn.addEventListener("click", () => { state.gamePaused = false; el.pauseMenu.hidden = true; }); [[el.pauseShopBtn, el.shop], [el.pauseStatsBtn, el.statsScreen], [el.pauseSettingsBtn, el.settingsScreen]].forEach(([button, target]) => button.addEventListener("click", () => { state.openedFromPause = true; el.pauseMenu.hidden = true; target.hidden = false; })); el.pauseMainMenuBtn.addEventListener("click", () => location.reload()); const setDifficulty = (value) => { state.currentDifficulty = value; el.menuDifficultySelect.value = value; el.pauseDifficultySelect.value = value; applyDifficulty(); }; el.menuDifficultySelect.addEventListener("change", () => setDifficulty(el.menuDifficultySelect.value)); el.pauseDifficultySelect.addEventListener("change", () => setDifficulty(el.pauseDifficultySelect.value)); }
-function initialiseApp() { const savedSkin = save.get("skin"); if (savedSkin) { if (savedSkin.includes("linear-gradient")) el.runawayBtn.style.backgroundImage = savedSkin; else el.runawayBtn.style.background = savedSkin; } applyDifficulty(); updatePowerupStatus(); updateShopUI(); applyTheme(state.selectedTheme); updateThemeUI(); refreshAchievementUI(); initialiseDailyReward(); renderHUD(); initialiseGame(); initialiseShop(); initialiseThemes(); initialiseSettings(); initialiseNavigation(); centerButton(); startPowerupTimers(); window.addEventListener("resize", () => { const rect = el.runawayBtn.getBoundingClientRect(); const arena = el.gameArena.getBoundingClientRect(); el.runawayBtn.style.left = `${Math.min(el.runawayBtn.offsetLeft, arena.width - rect.width)}px`; el.runawayBtn.style.top = `${Math.min(el.runawayBtn.offsetTop, arena.height - rect.height)}px`; }); document.addEventListener("visibilitychange", () => { if (!document.hidden || state.gameOver) return; state.gamePaused = true; el.pauseMenu.hidden = false; setMessage("⏸ Game Paused"); }); }
+function initialiseSettings() {
+  const toggles = [
+    ["floatingTextEnabled", el.floatingTextToggle],
+    ["achievementEnabled", el.achievementToggle],
+    ["powerupEnabled", el.powerupToggle],
+  ];
+  toggles.forEach(([key, control]) => {
+    control.checked = state[key];
+    control.addEventListener("change", () => {
+      state[key] = control.checked;
+      save.set(key, state[key]);
+    });
+  });
+  el.resetProgressBtn.addEventListener("click", () => {
+    if (!confirm("Reset all progress?")) return;
+    save.reset();
+    location.reload();
+  });
+}
+function initialiseNavigation() {
+  el.playBtn.addEventListener("click", () => {
+    state.newHighScoreCelebrated = false;
+
+    state.timeLeft = state.gameTime;
+
+    renderHUD();
+
+    el.mainMenu.hidden = true;
+    el.layout.hidden = false;
+
+    startTimer();
+  });
+  el.menuStatsBtn.addEventListener("click", () => {
+    el.mainMenu.hidden = true;
+    el.statsScreen.hidden = false;
+  });
+  el.closeStats.addEventListener("click", () => {
+    el.statsScreen.hidden = true;
+    if (state.openedFromPause) {
+      el.pauseMenu.hidden = false;
+      state.openedFromPause = false;
+    } else if (el.layout.hidden) el.mainMenu.hidden = false;
+  });
+  el.menuSettingsBtn.addEventListener("click", () => {
+    el.mainMenu.hidden = true;
+    el.settingsScreen.hidden = false;
+  });
+  el.closeSettings.addEventListener("click", () => {
+    el.settingsScreen.hidden = true;
+    if (state.openedFromPause) {
+      el.pauseMenu.hidden = false;
+      state.openedFromPause = false;
+    } else el.mainMenu.hidden = false;
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !state.gameOver) {
+      state.gamePaused = !state.gamePaused;
+      el.pauseMenu.hidden = !state.gamePaused;
+    }
+  });
+  el.resumeBtn.addEventListener("click", () => {
+    state.gamePaused = false;
+    el.pauseMenu.hidden = true;
+  });
+  [
+    [el.pauseShopBtn, el.shop],
+    [el.pauseStatsBtn, el.statsScreen],
+    [el.pauseSettingsBtn, el.settingsScreen],
+  ].forEach(([button, target]) =>
+    button.addEventListener("click", () => {
+      state.openedFromPause = true;
+      el.pauseMenu.hidden = true;
+      target.hidden = false;
+    }),
+  );
+  el.pauseMainMenuBtn.addEventListener("click", () => location.reload());
+  const setDifficulty = (value) => {
+    state.currentDifficulty = value;
+    el.menuDifficultySelect.value = value;
+    el.pauseDifficultySelect.value = value;
+    applyDifficulty();
+  };
+  el.menuDifficultySelect.addEventListener("change", () =>
+    setDifficulty(el.menuDifficultySelect.value),
+  );
+  el.pauseDifficultySelect.addEventListener("change", () =>
+    setDifficulty(el.pauseDifficultySelect.value),
+  );
+}
+function initialiseApp() {
+  const savedSkin = save.get("skin");
+  if (savedSkin) {
+    if (savedSkin.includes("linear-gradient"))
+      el.runawayBtn.style.backgroundImage = savedSkin;
+    else el.runawayBtn.style.background = savedSkin;
+  }
+  applyDifficulty();
+  updatePowerupStatus();
+  updateShopUI();
+  applyTheme(state.selectedTheme);
+  updateThemeUI();
+  refreshAchievementUI();
+  initialiseDailyReward();
+  renderHUD();
+  initialiseGame();
+  initialiseShop();
+  initialiseThemes();
+  initialiseSettings();
+  initialiseNavigation();
+  centerButton();
+  startPowerupTimers();
+  window.addEventListener("resize", () => {
+    const rect = el.runawayBtn.getBoundingClientRect();
+    const arena = el.gameArena.getBoundingClientRect();
+    el.runawayBtn.style.left = `${Math.min(el.runawayBtn.offsetLeft, arena.width - rect.width)}px`;
+    el.runawayBtn.style.top = `${Math.min(el.runawayBtn.offsetTop, arena.height - rect.height)}px`;
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden || state.gameOver) return;
+    state.gamePaused = true;
+    el.pauseMenu.hidden = false;
+    setMessage("⏸ Game Paused");
+  });
+}
 window.addEventListener("load", initialiseApp);
