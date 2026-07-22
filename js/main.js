@@ -7,6 +7,7 @@ import { initialiseShop, updateShopUI } from "./shop.js";
 import { applyTheme, initialiseThemes, updateThemeUI } from "./themes.js";
 import { initialiseDailyReward, refreshAchievementUI } from "./achievements.js";
 import { updatePowerupStatus, startPowerupTimers } from "./powerups.js";
+import { notifications } from "./notifications.js";
 
 function initialiseSettings() {
   const toggles = [
@@ -133,3 +134,9 @@ function initialiseApp() {
   });
 }
 window.addEventListener("load", initialiseApp);
+notifications.show({
+  icon: "🏆",
+  title: "UI Test",
+  message: "Notification system is working!",
+  reward: "+100 Coins",
+});
