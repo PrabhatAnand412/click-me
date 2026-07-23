@@ -1,0 +1,85 @@
+/* =========================
+   Notification System
+   ========================= */
+
+#notificationContainer {
+  position: fixed;
+
+  top: 24px;
+  right: 24px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  pointer-events: none;
+
+  z-index: 10000;
+}
+
+.notification {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 14px;
+
+  min-width: 340px;
+  max-width: 380px;
+
+  padding: 16px;
+
+  border-radius: 18px;
+
+  background: rgba(20, 30, 48, 0.82);
+  backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(56, 189, 248, 0.35);
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.35),
+    0 0 25px rgba(56, 189, 248, 0.08);
+
+  color: white;
+
+  opacity: 0;
+
+  transform: translateX(40px);
+}
+
+.notification-icon {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  font-size: 2rem;
+}
+
+.notification-content {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.notification-title {
+  font-size: 1rem;
+
+  font-weight: 700;
+
+  color: white;
+}
+
+.notification-message {
+  font-size: 0.95rem;
+
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.notification-reward {
+  margin-top: 4px;
+
+  font-weight: 700;
+
+  color: #facc15;
+}

@@ -144,6 +144,18 @@ export function teleportButton() {
   const arena = el.gameArena.getBoundingClientRect();
   el.runawayBtn.style.left = `${Math.random() * (arena.width - rect.width)}px`;
   el.runawayBtn.style.top = `${Math.random() * (arena.height - rect.height)}px`;
+  console.table({
+    arenaHeight: el.gameArena.clientHeight,
+    arenaWidth: el.gameArena.clientWidth,
+
+    buttonHeight: el.runawayBtn.offsetHeight,
+    buttonWidth: el.runawayBtn.offsetWidth,
+
+    top: el.runawayBtn.offsetTop,
+    left: el.runawayBtn.offsetLeft,
+
+    bottom: el.runawayBtn.offsetTop + el.runawayBtn.offsetHeight,
+  });
   randomTaunt();
 }
 export function centerButton() {

@@ -81,6 +81,38 @@
   }
 }
 
+.notification.show {
+  animation: notificationIn 0.35s ease forwards;
+}
+
+.notification.hide {
+  animation: notificationOut 0.35s ease forwards;
+}
+
+@keyframes notificationIn {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes notificationOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+}
+
 h1 {
   animation: glow 2s infinite alternate;
 }

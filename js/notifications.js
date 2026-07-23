@@ -53,10 +53,16 @@ class NotificationManager {
 
     // Animation will come next
 
-    setTimeout(() => {
-      card.remove();
+    card.classList.add("show");
 
-      this.displayNext();
+    setTimeout(() => {
+      card.classList.remove("show");
+      card.classList.add("hide");
+
+      setTimeout(() => {
+        card.remove();
+        this.displayNext();
+      }, 350);
     }, 3000);
   }
 }
